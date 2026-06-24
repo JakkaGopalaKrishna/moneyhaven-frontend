@@ -4,6 +4,7 @@ import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleOutlined, WarningOutlined
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllAnalytics } from '../../store/analyticsSlice';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import dayjs from 'dayjs';
 import { 
   LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer 
@@ -52,14 +53,20 @@ const Analytics = () => {
   }
 
   // Formatting for Recharts
-  const monthlyTrendData = spending?.monthlyExpenseTrend?.map((item, index) => {
-    const incItem = income?.monthlyIncomeTrend?.find(i => i.month === item.month) || { amount: 0 };
+  const allDates = new Set([
+    ...(spending?.dailyExpenseTrend?.map(i => i.date) || []),
+    ...(income?.dailyIncomeTrend?.map(i => i.date) || [])
+  ]);
+
+  const dailyTrendData = Array.from(allDates).sort().map(date => {
+    const expItem = spending?.dailyExpenseTrend?.find(i => i.date === date) || { amount: 0 };
+    const incItem = income?.dailyIncomeTrend?.find(i => i.date === date) || { amount: 0 };
     return {
-      name: item.month,
-      Expense: item.amount,
+      name: dayjs(date).format('MMM D'),
+      Expense: expItem.amount,
       Income: incItem.amount
     };
-  }) || [];
+  });
 
   const pieData = spending?.categoryBreakdown?.map(cat => ({
     name: cat.category,
@@ -147,7 +154,7 @@ const Analytics = () => {
           <SectionCard title="Income vs Expense Trend" className="p-2 md:p-5 h-full">
             <div className="h-[220px] md:h-[350px] lg:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={monthlyTrendData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                <AreaChart data={dailyTrendData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
