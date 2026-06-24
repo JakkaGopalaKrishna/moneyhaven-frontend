@@ -1,47 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Statistic, Progress, Button, Empty, Skeleton, Badge, Space, List, Tag } from 'antd';
+import { Row, Col, List, Progress, Badge, Button } from 'antd';
 import { 
-  WalletOutlined, 
-  ArrowUpOutlined, 
-  ArrowDownOutlined, 
-  BankOutlined, 
-  TransactionOutlined, 
-  ReloadOutlined,
-  PlusCircleOutlined,
-  MinusCircleOutlined,
-  PieChartOutlined,
-  FlagOutlined,
-  InfoCircleOutlined,
-  WarningOutlined,
-  CloseCircleOutlined,
-  CheckCircleOutlined
+  DownOutlined, 
+  UpOutlined, 
+  SettingOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined
 } from '@ant-design/icons';
-import CountUp from 'react-countup';
 import { useNavigate } from 'react-router-dom';
 import { getDashboardSummaryUser, getDashboardStatsUser } from '../../store/dashboardSlice';
 import { fetchNotifications } from '../../store/notificationSlice';
-import { DASHBOARD_CONSTANTS } from '../../constants/dashboard';
-import { TRANSACTION_TYPES } from '../../constants/transactions';
 import { formatCurrency } from '../../utils/currencyFormatter';
 import dayjs from 'dayjs';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const { TITLES, LABELS, EMPTY_STATES } = DASHBOARD_CONSTANTS;
-
-const AnimatedValue = ({ value, isCurrency = true }) => {
-  const CountUpComponent = CountUp.default || CountUp;
-  if (!isCurrency) return <CountUpComponent end={value || 0} duration={2} separator="," />;
-  
-  return (
-    <CountUpComponent 
-      end={value || 0} 
-      duration={2} 
-      separator="," 
-      decimals={2} 
-      prefix="₹" 
-    />
-  );
-};
+import HeroBanner from '../../components/dashboard/HeroBanner';
+import FinancialSummaryCards from '../../components/dashboard/FinancialSummaryCards';
+import QuickActionBar from '../../components/dashboard/QuickActionBar';
+import SectionCard from '../../components/common/SectionCard';
+import EmptyState from '../../components/common/EmptyState';
+import SkeletonLoader from '../../components/common/SkeletonLoader';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -49,345 +28,196 @@ const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const { summary, stats, loading } = useSelector((state) => state.dashboard);
   const { notifications } = useSelector((state) => state.notifications);
-  const [greeting, setGreeting] = useState('');
+
+  // Personalization: LocalStorage
+  const [collapsedSections, setCollapsedSections] = useState(() => {
+    const saved = localStorage.getItem('moneyhaven_dashboard_collapsed');
+    return saved ? JSON.parse(saved) : {};
+  });
 
   useEffect(() => {
     dispatch(getDashboardSummaryUser());
     dispatch(getDashboardStatsUser());
     dispatch(fetchNotifications('unread'));
-    
-    // Set greeting based on time
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 18) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
   }, [dispatch]);
 
-  const getNotificationIcon = (severity) => {
-    switch(severity) {
-      case 'Info': return <InfoCircleOutlined className="text-blue-500" />;
-      case 'Warning': return <WarningOutlined className="text-orange-500" />;
-      case 'Critical': return <CloseCircleOutlined className="text-red-500" />;
-      case 'Success': return <CheckCircleOutlined className="text-green-500" />;
-      default: return <InfoCircleOutlined className="text-gray-500" />;
-    }
+  const toggleSection = (sectionKey) => {
+    const updated = { ...collapsedSections, [sectionKey]: !collapsedSections[sectionKey] };
+    setCollapsedSections(updated);
+    localStorage.setItem('moneyhaven_dashboard_collapsed', JSON.stringify(updated));
   };
 
-  const handleRefresh = () => {
-    dispatch(getDashboardSummaryUser());
-    dispatch(getDashboardStatsUser());
-  };
-
-  // Skeleton placeholders
   if (loading && !summary) {
     return (
-      <div className="max-w-7xl mx-auto py-6 space-y-6">
-        <Skeleton active paragraph={{ rows: 2 }} />
-        <Row gutter={[16, 16]}>
-          {[1, 2, 3, 4].map((i) => (
-            <Col xs={24} sm={12} lg={6} key={i}>
-              <Card><Skeleton active paragraph={{ rows: 1 }} /></Card>
-            </Col>
-          ))}
-        </Row>
+      <div className="space-y-6">
+        <SkeletonLoader type="chart" />
+        <SkeletonLoader type="stat" count={4} />
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
-      {/* Welcome Banner & Refresh */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#1f1f1f] p-6 rounded-lg shadow-sm">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            {greeting}, {user?.firstName} 👋
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400">Here's your financial overview for today.</p>
+    <div className="space-y-8 animate-fade-in">
+      {/* 1. Hero Banner */}
+      <HeroBanner user={user} summary={summary} />
+
+      {/* 2. Quick Actions */}
+      <QuickActionBar />
+
+      {/* 3. Financial Summary Cards */}
+      <FinancialSummaryCards summary={summary} />
+
+      {/* 4. Charts Section (Placeholder link to analytics for now to keep Dashboard light, or simplified view) */}
+      <SectionCard 
+        title="Financial Insights" 
+        extra={<Button type="link" onClick={() => navigate('/analytics')}>Full Analytics</Button>}
+      >
+        <div className="h-[250px] md:h-[300px] lg:h-[400px] flex items-center justify-center bg-fintech-surface/50 rounded-xl border border-fintech-border/30">
+          <div className="text-center">
+            <div className="text-4xl mb-4">📈</div>
+            <p className="text-fintech-textMuted">Analytics charts have been moved to the dedicated Analytics module for better performance.</p>
+            <Button type="primary" className="mt-4" onClick={() => navigate('/analytics')}>View Charts</Button>
+          </div>
         </div>
-        <Button 
-          type="primary" 
-          icon={<ReloadOutlined />} 
-          onClick={handleRefresh} 
-          loading={loading}
-        >
-          Refresh Dashboard
-        </Button>
-      </div>
+      </SectionCard>
 
-      <Row gutter={[16, 16]}>
-        {/* Left Column: Summary & Stats */}
-        <Col xs={24} lg={16} className="space-y-6">
-          <Card title={TITLES.SUMMARY} className="shadow-sm">
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-blue-50 dark:bg-blue-900/20">
-                  <Statistic 
-                    title={LABELS.CURRENT_BALANCE}
-                    formatter={(val) => <AnimatedValue value={val} />}
-                    value={summary?.currentBalance || 0}
-                    prefix={<WalletOutlined className="text-blue-500 mr-2" />}
-                    styles={{ content: { color: '#1677ff', fontWeight: 'bold' } }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-green-50 dark:bg-green-900/20">
-                  <Statistic 
-                    title={LABELS.TOTAL_INCOME}
-                    formatter={(val) => <AnimatedValue value={val} />}
-                    value={summary?.totalIncome || 0}
-                    prefix={<ArrowUpOutlined className="text-green-500 mr-2" />}
-                    styles={{ content: { color: '#3f8600' } }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-red-50 dark:bg-red-900/20">
-                  <Statistic 
-                    title={LABELS.TOTAL_EXPENSES}
-                    formatter={(val) => <AnimatedValue value={val} />}
-                    value={summary?.totalExpenses || 0}
-                    prefix={<ArrowDownOutlined className="text-red-500 mr-2" />}
-                    styles={{ content: { color: '#cf1322' } }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-purple-50 dark:bg-purple-900/20">
-                  <Statistic 
-                    title={LABELS.SAVINGS}
-                    formatter={(val) => <AnimatedValue value={val} />}
-                    value={summary?.savings || 0}
-                    prefix={<BankOutlined className="text-purple-500 mr-2" />}
-                    styles={{ content: { color: '#722ed1' } }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-gray-50 dark:bg-gray-800">
-                  <Statistic 
-                    title={LABELS.OPENING_BALANCE}
-                    formatter={(val) => <AnimatedValue value={val} />}
-                    value={summary?.openingBalance || 0}
-                    styles={{ content: { color: '#8c8c8c' } }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={8}>
-                <Card variant="borderless" className="bg-gray-50 dark:bg-gray-800">
-                  <Statistic 
-                    title={LABELS.TOTAL_TRANSACTIONS}
-                    formatter={(val) => <AnimatedValue value={val} isCurrency={false} />}
-                    value={summary?.totalTransactions || 0}
-                    prefix={<TransactionOutlined className="text-gray-500 mr-2" />}
-                    styles={{ content: { color: '#8c8c8c' } }}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Card>
-
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
-              <Card title={TITLES.ACTIVITY} className="h-full shadow-sm" extra={<a onClick={() => navigate('/transactions')}>View All</a>}>
-                {stats?.recentTransactions && stats.recentTransactions.length > 0 ? (
-                  <List
-                    dataSource={stats.recentTransactions}
-                    renderItem={item => (
-                      <List.Item
-                        actions={[
-                          <span className={item.type === TRANSACTION_TYPES.INCOME ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
-                            {item.type === TRANSACTION_TYPES.INCOME ? '+' : '-'} {formatCurrency(item.amount)}
-                          </span>
-                        ]}
-                      >
-                        <List.Item.Meta
-                          title={<span className="dark:text-white">{item.title}</span>}
-                          description={dayjs(item.transactionDate).format('MMM D, YYYY')}
-                        />
-                      </List.Item>
-                    )}
-                  />
-                ) : (
-                  <Empty description={EMPTY_STATES.TRANSACTIONS} />
+      <Row gutter={[24, 24]}>
+        {/* 5. Recent Transactions */}
+        <Col xs={24} lg={12}>
+          <SectionCard 
+            title="Recent Transactions" 
+            extra={<Button type="link" onClick={() => navigate('/transactions')}>View All</Button>}
+          >
+            {stats?.recentTransactions?.length > 0 ? (
+              <List
+                dataSource={stats.recentTransactions}
+                renderItem={item => (
+                  <List.Item className="border-b border-fintech-border/30 py-3 last:border-0 hover:bg-fintech-bg/50 px-2 rounded-lg transition-colors cursor-pointer">
+                    <List.Item.Meta
+                      avatar={<div className="w-10 h-10 rounded-full bg-fintech-bg flex items-center justify-center text-lg">{item.type === 'income' ? '💰' : '🛒'}</div>}
+                      title={<span className="text-fintech-text font-medium">{item.title}</span>}
+                      description={<span className="text-fintech-textMuted text-xs">{dayjs(item.transactionDate).format('MMM D, YYYY')}</span>}
+                    />
+                    <div className={`font-medium ${item.type === 'income' ? 'text-fintech-success' : 'text-fintech-danger'}`}>
+                      {item.type === 'income' ? '+' : '-'}{formatCurrency(item.amount)}
+                    </div>
+                  </List.Item>
                 )}
-              </Card>
-            </Col>
-            <Col xs={24} md={12}>
-              <Card title={TITLES.INSIGHTS} className="h-full shadow-sm" extra={<a onClick={() => navigate('/budgets')}>Budgets</a>}>
-                {summary?.budgetSummary ? (
-                  <div className="space-y-4">
-                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg flex justify-between items-center">
-                      <span className="text-red-700 dark:text-red-400 font-medium">Most Overspent</span>
-                      <span className="font-bold dark:text-white">
-                        {summary.budgetSummary.mostOverspent ? `${summary.budgetSummary.mostOverspent.category} (${summary.budgetSummary.mostOverspent.percentage.toFixed(0)}%)` : 'None'}
-                      </span>
-                    </div>
-                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg flex justify-between items-center">
-                      <span className="text-green-700 dark:text-green-400 font-medium">Highest Remaining</span>
-                      <span className="font-bold dark:text-white">
-                        {summary.budgetSummary.highestRemaining ? `${summary.budgetSummary.highestRemaining.category} (${formatCurrency(summary.budgetSummary.highestRemaining.amount)})` : 'None'}
-                      </span>
-                    </div>
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex justify-between items-center">
-                      <span className="text-blue-700 dark:text-blue-400 font-medium">Total Budget</span>
-                      <span className="font-bold dark:text-white">
-                        {formatCurrency(summary.budgetSummary.totalBudgetAmount)}
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <Empty description={EMPTY_STATES.CHARTS} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                )}
-              </Card>
-            </Col>
-          </Row>
+              />
+            ) : (
+              <EmptyState 
+                title="No Transactions Found" 
+                description="Start tracking your spending by adding your first transaction." 
+                action={<Button type="primary" onClick={() => navigate('/transactions', { state: { openModal: true } })}>Add Transaction</Button>} 
+              />
+            )}
+          </SectionCard>
         </Col>
 
-        {/* Right Column: Account & Quick Actions */}
-        <Col xs={24} lg={8} className="space-y-6">
-          <Card title={LABELS.HEALTH_SCORE} className="shadow-sm text-center">
-            <Progress 
-              type="dashboard" 
-              percent={summary?.healthScore || 0} 
-              format={(percent) => `${percent}/100`}
-              strokeColor={{
-                '0%': '#ff4d4f',
-                '100%': '#52c41a',
-              }}
-            />
-            <p className="mt-4 text-gray-500 dark:text-gray-400">
-              {summary?.healthScore >= 80 ? 'Your financial health is excellent!' : 
-               summary?.healthScore >= 60 ? 'Your financial health is looking good!' : 
-               summary?.healthScore >= 40 ? 'Your financial health is fair.' : 
-               'Your financial health needs attention.'}
-            </p>
-            <Button type="link" onClick={() => navigate('/analytics')} className="mt-2">
-              View Full Analysis
-            </Button>
-          </Card>
-
-          <Card title="Recent Alerts" className="shadow-sm" extra={<a onClick={() => navigate('/notifications')}>View All</a>}>
-            <List
-              itemLayout="horizontal"
-              dataSource={notifications.slice(0, 3)}
-              locale={{ emptyText: <div className="text-center text-gray-500 py-4">No new alerts</div> }}
-              renderItem={(item) => (
-                <List.Item className="border-b border-gray-50 dark:border-gray-800 last:border-0 p-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md" onClick={() => item.actionUrl && navigate(item.actionUrl)}>
-                  <List.Item.Meta
-                    avatar={<div className="mt-1">{getNotificationIcon(item.severity)}</div>}
-                    title={<span className="text-sm font-medium dark:text-white line-clamp-1">{item.title}</span>}
-                    description={<span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{item.message}</span>}
-                  />
-                </List.Item>
-              )}
-            />
-          </Card>
-
-          <Card title={TITLES.ACTIONS} className="shadow-sm">
-            <div className="grid grid-cols-2 gap-4">
-              <Button 
-                type="dashed" 
-                icon={<PlusCircleOutlined />} 
-                className="h-20 flex flex-col items-center justify-center text-green-600 hover:text-green-500 hover:border-green-500"
-                onClick={() => navigate('/transactions', { state: { openModal: true, type: 'income' } })}
-              >
-                <span className="mt-2">Add Income</span>
-              </Button>
-              <Button 
-                type="dashed" 
-                icon={<MinusCircleOutlined />} 
-                className="h-20 flex flex-col items-center justify-center text-red-600 hover:text-red-500 hover:border-red-500"
-                onClick={() => navigate('/transactions', { state: { openModal: true, type: 'expense' } })}
-              >
-                <span className="mt-2">Add Expense</span>
-              </Button>
-              <Button 
-                type="dashed" 
-                icon={<PieChartOutlined />} 
-                className="h-20 flex flex-col items-center justify-center text-blue-600 hover:text-blue-500 hover:border-blue-500"
-                onClick={() => navigate('/budgets')}
-              >
-                <span className="mt-2">Set Budget</span>
-              </Button>
-              <Button 
-                type="dashed" 
-                icon={<FlagOutlined />} 
-                className="h-20 flex flex-col items-center justify-center text-purple-600 hover:text-purple-500 hover:border-purple-500"
-                onClick={() => navigate('/goals')}
-              >
-                <span className="mt-2">Create Goal</span>
-              </Button>
-            </div>
-            <Button 
-              type="dashed" 
-              block
-              className="mt-4 h-12 text-indigo-600 border-indigo-200 hover:text-indigo-500 hover:border-indigo-500"
-              onClick={() => navigate('/reports')}
-            >
-              Export Financial Reports
-            </Button>
-          </Card>
-
-          <Card title="Savings Goals" className="shadow-sm" extra={<a onClick={() => navigate('/goals')}>View All</a>}>
-            {summary?.savingsGoalsSummary ? (
-              <div className="space-y-4">
-                <div className="flex justify-between items-end">
-                  <span className="text-gray-500 dark:text-gray-400">Overall Progress</span>
-                  <span className="font-bold text-lg dark:text-white">{summary.savingsGoalsSummary.overallProgress}%</span>
-                </div>
-                <Progress percent={summary.savingsGoalsSummary.overallProgress} strokeColor="#722ed1" showInfo={false} />
-                
-                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 space-y-3">
-                  {summary.savingsGoalsSummary.topGoals.map((g, idx) => (
-                    <div key={idx} className="flex justify-between items-center">
-                      <div className="flex flex-col">
-                        <span className="font-medium dark:text-white truncate max-w-[120px]" title={g.title}>{g.title}</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{dayjs(g.targetDate).format('MMM D')}</span>
+        {/* 6. Budget Overview */}
+        <Col xs={24} lg={12}>
+          <SectionCard 
+            title="Budget Overview" 
+            extra={
+              <div className="flex gap-2">
+                <Button type="text" icon={collapsedSections['budgets'] ? <EyeInvisibleOutlined /> : <DownOutlined />} onClick={() => toggleSection('budgets')} />
+              </div>
+            }
+          >
+            <AnimatePresence>
+              {!collapsedSections['budgets'] && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                  {summary?.budgetSummary?.totalBudgetAmount > 0 ? (
+                    <div className="space-y-4 pt-2">
+                      <div className="flex justify-between items-end mb-1">
+                        <span className="text-fintech-textMuted">Overall Usage</span>
+                        <span className="font-bold text-fintech-text">{summary.budgetSummary.overallBudgetUsagePercentage}%</span>
                       </div>
-                      <Progress type="circle" percent={g.progressPercentage} width={40} />
+                      <Progress 
+                        percent={summary.budgetSummary.overallBudgetUsagePercentage} 
+                        strokeColor={summary.budgetSummary.overallBudgetUsagePercentage > 90 ? '#ef4444' : '#3b82f6'} 
+                        showInfo={false} 
+                      />
+                      <div className="flex justify-between text-xs mt-2">
+                        <span className="text-fintech-textMuted">Spent: {formatCurrency(summary.budgetSummary.totalBudgetSpending)}</span>
+                        <span className="text-fintech-textMuted">Remaining: {formatCurrency(summary.budgetSummary.overallRemainingBudget)}</span>
+                      </div>
                     </div>
-                  ))}
-                  {summary.savingsGoalsSummary.topGoals.length === 0 && (
-                    <div className="text-center text-gray-500 dark:text-gray-400 py-2">No active goals found.</div>
+                  ) : (
+                    <EmptyState 
+                      title="No Active Budgets" 
+                      description="Set up a budget to keep your spending in check."
+                      action={<Button type="primary" onClick={() => navigate('/budgets')}>Create Budget</Button>}
+                    />
                   )}
-                </div>
-              </div>
-            ) : (
-              <Empty description={EMPTY_STATES.CHARTS} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </SectionCard>
+        </Col>
 
-          <Card title={TITLES.ACCOUNT} className="shadow-sm">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                <span className="text-gray-500 dark:text-gray-400">Full Name</span>
-                <span className="font-medium dark:text-white">{user?.firstName} {user?.lastName}</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                <span className="text-gray-500 dark:text-gray-400">Email</span>
-                <span className="font-medium dark:text-white truncate max-w-[150px]" title={user?.email}>{user?.email}</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                <span className="text-gray-500 dark:text-gray-400">Opening Balance</span>
-                <span className="font-medium dark:text-white">{formatCurrency(user?.openingBalance)}</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                <span className="text-gray-500 dark:text-gray-400">Status</span>
-                {user?.isVerified ? (
-                  <Badge status="success" text="Verified Email" className="dark:text-white" />
-                ) : (
-                  <Badge status="warning" text="Unverified" className="dark:text-white" />
-                )}
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-500 dark:text-gray-400">Member Since</span>
-                <span className="font-medium dark:text-white">
-                  {summary?.memberSince ? new Date(summary.memberSince).toLocaleDateString() : 'N/A'}
-                </span>
-              </div>
-            </div>
-          </Card>
+        {/* 7. Goals Overview */}
+        <Col xs={24} lg={12}>
+          <SectionCard 
+            title="Savings Goals" 
+            extra={<Button type="text" icon={collapsedSections['goals'] ? <EyeInvisibleOutlined /> : <DownOutlined />} onClick={() => toggleSection('goals')} />}
+          >
+            <AnimatePresence>
+              {!collapsedSections['goals'] && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="pt-2">
+                  {summary?.savingsGoalsSummary?.topGoals?.length > 0 ? (
+                    <div className="space-y-4">
+                      {summary.savingsGoalsSummary.topGoals.map((g, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                          <div>
+                            <div className="text-fintech-text font-medium">{g.title}</div>
+                            <div className="text-fintech-textMuted text-xs">Target: {dayjs(g.targetDate).format('MMM YYYY')}</div>
+                          </div>
+                          <Progress type="circle" percent={g.progressPercentage} width={40} strokeColor="#22c55e" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <EmptyState 
+                      title="No Goals Set" 
+                      description="Start saving for your dreams."
+                      action={<Button type="primary" onClick={() => navigate('/goals')}>Set a Goal</Button>}
+                    />
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </SectionCard>
+        </Col>
+
+        {/* 8. Notifications */}
+        <Col xs={24} lg={12}>
+          <SectionCard 
+            title="Recent Alerts" 
+            extra={<Button type="text" icon={collapsedSections['notifications'] ? <EyeInvisibleOutlined /> : <DownOutlined />} onClick={() => toggleSection('notifications')} />}
+          >
+            <AnimatePresence>
+              {!collapsedSections['notifications'] && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="pt-2">
+                  {notifications?.length > 0 ? (
+                    <List
+                      dataSource={notifications.slice(0, 3)}
+                      renderItem={(item) => (
+                        <List.Item className="border-b border-fintech-border/30 py-3 last:border-0">
+                          <List.Item.Meta
+                            title={<span className="text-sm font-medium text-fintech-text">{item.title}</span>}
+                            description={<span className="text-xs text-fintech-textMuted">{item.message}</span>}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  ) : (
+                    <EmptyState title="All Caught Up!" description="You have no new alerts." />
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </SectionCard>
         </Col>
       </Row>
     </div>
