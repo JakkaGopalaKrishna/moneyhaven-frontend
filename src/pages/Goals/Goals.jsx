@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Row, Col, Typography, Button, Card, Statistic, Progress, Tag, Space, 
-  Dropdown, Menu, Empty, Select, Alert, Spin, message, Modal 
+  Row, Col, Typography, Button, Statistic, Progress, Tag, Space, 
+  Dropdown, Menu, Select, Alert, Spin, message, Modal 
 } from 'antd';
 import { 
   PlusOutlined, TrophyOutlined, AimOutlined, DollarOutlined, 
@@ -17,8 +17,11 @@ import AddSavingsModal from './AddSavingsModal';
 import GoalDetailsDrawer from './GoalDetailsDrawer';
 import { formatCurrency } from '../../utils/currencyFormatter';
 import dayjs from 'dayjs';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
+import EmptyState from '../../components/common/EmptyState';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Option } = Select;
 
 const Goals = () => {
@@ -114,17 +117,17 @@ const Goals = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <Title level={2} className="!mb-1 dark:text-white">Savings Goals</Title>
-          <Text className="text-gray-500 dark:text-gray-400">Track and achieve your financial targets.</Text>
-        </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAddGoal} size="large">
-          Create Goal
-        </Button>
-      </div>
+      <PageHeader 
+        title="Savings Goals" 
+        subtitle="Track and achieve your financial targets."
+        actions={
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAddGoal} size="large" className="rounded-full px-6">
+            Create Goal
+          </Button>
+        }
+      />
 
       {/* Alerts */}
       <div className="space-y-2">
@@ -155,61 +158,61 @@ const Goals = () => {
       </div>
 
       {/* Stats Dashboard */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[24, 24]}>
         <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+          <SectionCard>
             <Statistic title="Total Active Goals" value={stats?.activeGoals || 0} prefix={<AimOutlined />} />
-          </Card>
+          </SectionCard>
         </Col>
         <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+          <SectionCard>
             <Statistic title="Total Target" value={stats?.totalTargetAmount || 0} prefix="₹" />
-          </Card>
+          </SectionCard>
         </Col>
         <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic title="Total Saved" value={stats?.totalSavedAmount || 0} prefix="₹" valueStyle={{ color: '#3f8600' }} />
-          </Card>
+          <SectionCard>
+            <Statistic title="Total Saved" value={stats?.totalSavedAmount || 0} prefix="₹" valueStyle={{ color: '#22c55e' }} />
+          </SectionCard>
         </Col>
         <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic title="Overall Progress" value={stats?.overallProgress || 0} prefix={<RiseOutlined />} suffix="%" valueStyle={{ color: '#1677ff' }} />
-          </Card>
+          <SectionCard>
+            <Statistic title="Overall Progress" value={stats?.overallProgress || 0} prefix={<RiseOutlined />} suffix="%" valueStyle={{ color: '#3b82f6' }} />
+          </SectionCard>
         </Col>
       </Row>
 
       {/* Insights Section */}
       {insights && (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[24, 24]}>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-orange-50 dark:bg-orange-900/20 h-full">
+            <SectionCard className="bg-orange-50 dark:bg-fintech-warning/10 border-orange-100 dark:border-fintech-warning/20">
               <Statistic 
-                title={<span className="text-orange-700 dark:text-orange-400">Nearest Deadline</span>}
+                title={<span className="text-orange-700 dark:text-orange-400 font-medium">Nearest Deadline</span>}
                 value={insights.nearestGoal?.title || 'N/A'} 
                 prefix={<CalendarOutlined />} 
                 suffix={insights.nearestGoal ? `(${dayjs(insights.nearestGoal.targetDate).format('MMM D')})` : ''}
               />
-            </Card>
+            </SectionCard>
           </Col>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-red-50 dark:bg-red-900/20 h-full">
+            <SectionCard className="bg-red-50 dark:bg-fintech-danger/10 border-red-100 dark:border-fintech-danger/20">
               <Statistic 
-                title={<span className="text-red-700 dark:text-red-400">Highest Priority</span>}
+                title={<span className="text-red-700 dark:text-red-400 font-medium">Highest Priority</span>}
                 value={insights.highestPriorityGoal?.title || 'N/A'} 
                 prefix={<FireOutlined />} 
                 suffix={insights.highestPriorityGoal ? `(${insights.highestPriorityGoal.priority})` : ''}
               />
-            </Card>
+            </SectionCard>
           </Col>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-green-50 dark:bg-green-900/20 h-full">
+            <SectionCard className="bg-green-50 dark:bg-fintech-success/10 border-green-100 dark:border-fintech-success/20">
               <Statistic 
-                title={<span className="text-green-700 dark:text-green-400">Most Funded</span>}
+                title={<span className="text-green-700 dark:text-green-400 font-medium">Most Funded</span>}
                 value={insights.mostFundedGoal?.title || 'N/A'} 
                 prefix={<DollarOutlined />} 
                 suffix={insights.mostFundedGoal ? `(${insights.mostFundedGoal.progress}%)` : ''}
               />
-            </Card>
+            </SectionCard>
           </Col>
         </Row>
       )}
@@ -249,17 +252,17 @@ const Goals = () => {
       {loading && progressData.length === 0 ? (
         <div className="flex justify-center p-12"><Spin size="large" /></div>
       ) : filteredGoals.length === 0 ? (
-        <Card className="text-center py-12 dark:bg-[#1f1f1f] dark:border-gray-800">
-          <Empty description="No goals found matching your criteria" />
-          <Button type="primary" className="mt-4" onClick={handleAddGoal}>Create a Goal</Button>
-        </Card>
+        <EmptyState 
+          title="No goals found" 
+          description="Try adjusting your filters or create a new goal." 
+          action={<Button type="primary" onClick={handleAddGoal}>Create a Goal</Button>}
+        />
       ) : (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[24, 24]}>
           {filteredGoals.map(goal => (
             <Col xs={24} sm={12} lg={8} key={goal._id}>
-              <Card 
-                hoverable 
-                className={`h-full shadow-sm ${goal.status === 'Completed' ? 'border-green-200 bg-green-50/30' : ''}`}
+              <SectionCard 
+                className={`${goal.status === 'Completed' ? 'border-green-200 bg-green-50/30' : ''}`}
                 actions={[
                   <Button type="text" icon={<PlusOutlined />} onClick={() => handleAddSavings(goal)} disabled={goal.status === 'Completed'}>Add Savings</Button>,
                   <Button type="text" icon={<EyeOutlined />} onClick={() => handleViewGoal(goal)}>Details</Button>,
@@ -267,8 +270,8 @@ const Goals = () => {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <Title level={5} className="!mb-0 truncate pr-2" title={goal.title}>{goal.title}</Title>
-                    <Text type="secondary" className="text-xs">{goal.category}</Text>
+                    <div className="text-lg font-semibold truncate pr-2 dark:text-white" title={goal.title}>{goal.title}</div>
+                    <Text className="text-fintech-textMuted text-xs">{goal.category}</Text>
                   </div>
                   <Dropdown
                     overlay={
@@ -290,8 +293,8 @@ const Goals = () => {
                     strokeColor={getHealthColor(goal.healthStatus)}
                     format={pct => (
                       <div className="flex flex-col items-center">
-                        <span className="text-lg font-bold">{pct}%</span>
-                        <span className="text-xs text-gray-500 font-normal">{goal.healthStatus}</span>
+                        <span className="text-lg font-bold dark:text-white">{pct}%</span>
+                        <span className="text-xs text-fintech-textMuted font-normal">{goal.healthStatus}</span>
                       </div>
                     )}
                   />
@@ -299,29 +302,29 @@ const Goals = () => {
 
                 <div className="space-y-2 mt-2">
                   <div className="flex justify-between text-sm">
-                    <Text type="secondary">Saved:</Text>
-                    <Text strong className="text-green-600">{formatCurrency(goal.savedAmount)}</Text>
+                    <Text className="text-fintech-textMuted">Saved:</Text>
+                    <Text className="text-fintech-success font-semibold">{formatCurrency(goal.savedAmount)}</Text>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <Text type="secondary">Target:</Text>
-                    <Text strong>{formatCurrency(goal.targetAmount)}</Text>
+                    <Text className="text-fintech-textMuted">Target:</Text>
+                    <Text className="font-semibold dark:text-white">{formatCurrency(goal.targetAmount)}</Text>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <Text type="secondary">Remaining:</Text>
-                    <Text strong>{formatCurrency(goal.remainingAmount)}</Text>
+                    <Text className="text-fintech-textMuted">Remaining:</Text>
+                    <Text className="font-semibold dark:text-white">{formatCurrency(goal.remainingAmount)}</Text>
                   </div>
                   
-                  <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs">
+                  <div className="pt-3 border-t border-fintech-border/50 flex justify-between items-center text-xs mt-3">
                     <Space>
-                      <CalendarOutlined className="text-gray-400" />
-                      <Text type="secondary">{dayjs(goal.targetDate).format('MMM D, YYYY')}</Text>
+                      <CalendarOutlined className="text-fintech-textMuted" />
+                      <Text className="text-fintech-textMuted">{dayjs(goal.targetDate).format('MMM D, YYYY')}</Text>
                     </Space>
                     <Tag color={goal.daysRemaining <= 14 && goal.status === 'Active' ? 'error' : 'default'} bordered={false}>
                       {goal.status === 'Completed' ? 'Achieved' : `${goal.daysRemaining} days left`}
                     </Tag>
                   </div>
                 </div>
-              </Card>
+              </SectionCard>
             </Col>
           ))}
         </Row>

@@ -17,8 +17,10 @@ import TransactionDetailsDrawer from './TransactionDetailsDrawer';
 import { CATEGORY_COLORS, TRANSACTION_TYPES } from '../../constants/transactions';
 import { formatCurrency } from '../../utils/currencyFormatter';
 import dayjs from 'dayjs';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -217,87 +219,89 @@ const Transactions = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <Title level={2} className="!mb-1 dark:text-white">Transactions</Title>
-          <Text className="text-gray-500 dark:text-gray-400">Manage your income and expenses efficiently.</Text>
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader 
+        title="Transactions" 
+        subtitle="Manage your income and expenses efficiently."
+        actions={
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} size="large" className="rounded-full px-6">
+            Add Transaction
+          </Button>
+        }
+      />
+
+      <SectionCard>
+        {/* Filters Section */}
+        <div className="space-y-4 mb-6">
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={12} md={8} lg={6}>
+              <Input.Search
+                placeholder="Search by title..."
+                allowClear
+                onSearch={handleSearch}
+                onChange={(e) => setSearchText(e.target.value)}
+                value={searchText}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6}>
+              <Select
+                className="w-full"
+                placeholder="Filter by Type"
+                allowClear
+                onChange={(val) => handleFilterChange('type', val)}
+              >
+                <Option value={TRANSACTION_TYPES.INCOME}>Income</Option>
+                <Option value={TRANSACTION_TYPES.EXPENSE}>Expense</Option>
+              </Select>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6}>
+              <RangePicker 
+                className="w-full" 
+                onChange={handleDateRangeChange}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6}>
+               <Select
+                className="w-full"
+                placeholder="Sort By"
+                value={filters.sort}
+                onChange={(val) => handleFilterChange('sort', val)}
+              >
+                <Option value="newest">Newest First</Option>
+                <Option value="oldest">Oldest First</Option>
+                <Option value="highest">Highest Amount</Option>
+                <Option value="lowest">Lowest Amount</Option>
+              </Select>
+            </Col>
+          </Row>
         </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} size="large">
-          Add Transaction
-        </Button>
-      </div>
 
-      {/* Filters Section */}
-      <div className="bg-white dark:bg-[#1f1f1f] p-4 rounded-lg shadow-sm space-y-4">
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <Input.Search
-              placeholder="Search by title..."
-              allowClear
-              onSearch={handleSearch}
-              onChange={(e) => setSearchText(e.target.value)}
-              value={searchText}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <Select
-              className="w-full"
-              placeholder="Filter by Type"
-              allowClear
-              onChange={(val) => handleFilterChange('type', val)}
-            >
-              <Option value={TRANSACTION_TYPES.INCOME}>Income</Option>
-              <Option value={TRANSACTION_TYPES.EXPENSE}>Expense</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <RangePicker 
-              className="w-full" 
-              onChange={handleDateRangeChange}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-             <Select
-              className="w-full"
-              placeholder="Sort By"
-              value={filters.sort}
-              onChange={(val) => handleFilterChange('sort', val)}
-            >
-              <Option value="newest">Newest First</Option>
-              <Option value="oldest">Oldest First</Option>
-              <Option value="highest">Highest Amount</Option>
-              <Option value="lowest">Lowest Amount</Option>
-            </Select>
-          </Col>
-        </Row>
-      </div>
-
-      {/* Table Section */}
-      <div className="bg-white dark:bg-[#1f1f1f] rounded-lg shadow-sm overflow-hidden">
-        <Table
-          columns={columns}
-          dataSource={transactions}
-          rowKey="_id"
-          loading={loading}
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: pagination.total,
-            showSizeChanger: true,
-          }}
-          onChange={handleTableChange}
-          scroll={{ x: 800 }}
-          locale={{
-            emptyText: (
-              <div className="py-8">
-                <p className="text-gray-500 dark:text-gray-400 mb-4">No transactions found.</p>
-                <Button type="primary" onClick={handleAdd}>Add your first transaction</Button>
-              </div>
-            )
-          }}
-        />
-      </div>
+        {/* Table Section */}
+        <div className="overflow-hidden">
+          <Table
+            columns={columns}
+            dataSource={transactions}
+            rowKey="_id"
+            loading={loading}
+            pagination={{
+              current: currentPage,
+              pageSize: pageSize,
+              total: pagination.total,
+              showSizeChanger: true,
+            }}
+            onChange={handleTableChange}
+            scroll={{ x: 800 }}
+            locale={{
+              emptyText: (
+                <div className="py-8">
+                  <p className="text-fintech-textMuted mb-4">No transactions found.</p>
+                  <Button type="primary" onClick={handleAdd}>Add your first transaction</Button>
+                </div>
+              )
+            }}
+          />
+        </div>
+      </SectionCard>
 
       <TransactionFormModal
         visible={isFormVisible}

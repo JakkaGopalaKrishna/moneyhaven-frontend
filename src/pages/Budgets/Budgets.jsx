@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Table, Button, Space, Tag, Modal, message, Select, Row, Col, Typography, Card, Statistic, Progress, Alert 
+  Table, Button, Space, Tag, Modal, message, Select, Row, Col, Typography, Statistic, Progress, Alert 
 } from 'antd';
 import { 
   PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, DashboardOutlined, 
@@ -14,8 +14,10 @@ import BudgetFormModal from './BudgetFormModal';
 import BudgetDetailsDrawer from './BudgetDetailsDrawer';
 import { formatCurrency } from '../../utils/currencyFormatter';
 import dayjs from 'dayjs';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Option } = Select;
 
 const Budgets = () => {
@@ -187,16 +189,16 @@ const Budgets = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <Title level={2} className="!mb-1 dark:text-white">Budgets</Title>
-          <Text className="text-gray-500 dark:text-gray-400">Track and manage your category spending limits.</Text>
-        </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} size="large">
-          Create Budget
-        </Button>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader 
+        title="Budgets" 
+        subtitle="Track and manage your category spending limits."
+        actions={
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} size="large" className="rounded-full px-6">
+            Create Budget
+          </Button>
+        }
+      />
 
       {/* Alerts Section */}
       {activeAlerts.length > 0 && (
@@ -216,123 +218,125 @@ const Budgets = () => {
       )}
 
       {/* Stats Dashboard */}
-      <Row gutter={[16, 16]}>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+      <Row gutter={[24, 24]}>
+        <Col xs={12} lg={6}>
+          <SectionCard>
             <Statistic title="Total Budgets" value={stats?.totalBudgets || 0} prefix={<DashboardOutlined />} />
-          </Card>
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+        <Col xs={12} lg={6}>
+          <SectionCard>
             <Statistic title="Budgeted Amount" value={stats?.totalBudgetAmount || 0} prefix="₹" />
-          </Card>
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic title="Total Spending" value={stats?.totalSpending || 0} prefix="₹" valueStyle={{ color: '#cf1322' }} />
-          </Card>
+        <Col xs={12} lg={6}>
+          <SectionCard>
+            <Statistic title="Total Spending" value={stats?.totalSpending || 0} prefix="₹" valueStyle={{ color: '#ef4444' }} />
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic title="Remaining" value={stats?.remainingBudget || 0} prefix="₹" valueStyle={{ color: '#3f8600' }} />
-          </Card>
+        <Col xs={12} lg={6}>
+          <SectionCard>
+            <Statistic title="Remaining" value={stats?.remainingBudget || 0} prefix="₹" valueStyle={{ color: '#22c55e' }} />
+          </SectionCard>
         </Col>
       </Row>
 
       {/* Insights Section */}
       {progressData?.insights && (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[24, 24]}>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-red-50 dark:bg-red-900/20 h-full">
+            <SectionCard className="bg-red-50 dark:bg-fintech-danger/10 border-red-100 dark:border-fintech-danger/20">
               <Statistic 
-                title={<span className="text-red-700 dark:text-red-400">Most Overspent</span>}
+                title={<span className="text-red-700 dark:text-red-400 font-medium">Most Overspent</span>}
                 value={progressData.insights.topOverspentCategory?.category?.name || 'N/A'} 
                 prefix={<FallOutlined />} 
                 suffix={progressData.insights.topOverspentCategory ? `(${progressData.insights.topOverspentCategory.percentageUsed}%)` : ''}
               />
-            </Card>
+            </SectionCard>
           </Col>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-green-50 dark:bg-green-900/20 h-full">
+            <SectionCard className="bg-green-50 dark:bg-fintech-success/10 border-green-100 dark:border-fintech-success/20">
               <Statistic 
-                title={<span className="text-green-700 dark:text-green-400">Most Underutilized</span>}
+                title={<span className="text-green-700 dark:text-green-400 font-medium">Most Underutilized</span>}
                 value={progressData.insights.topUnderutilizedCategory?.category?.name || 'N/A'} 
                 prefix={<RiseOutlined />} 
                 suffix={progressData.insights.topUnderutilizedCategory ? `(${progressData.insights.topUnderutilizedCategory.percentageUsed}%)` : ''}
               />
-            </Card>
+            </SectionCard>
           </Col>
           <Col xs={24} md={8}>
-            <Card bordered={false} className="shadow-sm bg-blue-50 dark:bg-blue-900/20 h-full">
+            <SectionCard className="bg-blue-50 dark:bg-fintech-primary/10 border-blue-100 dark:border-fintech-primary/20">
               <Statistic 
-                title={<span className="text-blue-700 dark:text-blue-400">Budget Health Score</span>}
+                title={<span className="text-blue-700 dark:text-blue-400 font-medium">Budget Health Score</span>}
                 value={progressData.insights.budgetHealthScore || 100} 
                 prefix={<HeartOutlined />} 
                 suffix="/ 100"
               />
-            </Card>
+            </SectionCard>
           </Col>
         </Row>
       )}
 
-      {/* Filters Section */}
-      <div className="bg-white dark:bg-[#1f1f1f] p-4 rounded-lg shadow-sm space-y-4">
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={8}>
-            <Select
-              className="w-full"
-              value={filterMonth}
-              onChange={(val) => setFilterMonth(val)}
-            >
-              {months.map(m => <Option key={m.value} value={m.value}>{m.label}</Option>)}
-            </Select>
-          </Col>
-          <Col xs={24} sm={8}>
-            <Select
-              className="w-full"
-              value={filterYear}
-              onChange={(val) => setFilterYear(val)}
-            >
-              {years.map(y => <Option key={y} value={y}>{y}</Option>)}
-            </Select>
-          </Col>
-          <Col xs={24} sm={8}>
-            <Select
-              className="w-full"
-              placeholder="Filter by Status"
-              allowClear
-              onChange={(val) => setFilterStatus(val)}
-            >
-              <Option value="Safe">Safe</Option>
-              <Option value="Warning">Warning</Option>
-              <Option value="Exceeded">Exceeded</Option>
-            </Select>
-          </Col>
-        </Row>
-      </div>
-
-      {/* Table Section */}
-      <div className="bg-white dark:bg-[#1f1f1f] rounded-lg shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
-          <Text strong>Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days remaining)</Text>
+      <SectionCard>
+        {/* Filters Section */}
+        <div className="space-y-4 mb-6">
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={8}>
+              <Select
+                className="w-full"
+                value={filterMonth}
+                onChange={(val) => setFilterMonth(val)}
+              >
+                {months.map(m => <Option key={m.value} value={m.value}>{m.label}</Option>)}
+              </Select>
+            </Col>
+            <Col xs={24} sm={8}>
+              <Select
+                className="w-full"
+                value={filterYear}
+                onChange={(val) => setFilterYear(val)}
+              >
+                {years.map(y => <Option key={y} value={y}>{y}</Option>)}
+              </Select>
+            </Col>
+            <Col xs={24} sm={8}>
+              <Select
+                className="w-full"
+                placeholder="Filter by Status"
+                allowClear
+                onChange={(val) => setFilterStatus(val)}
+              >
+                <Option value="Safe">Safe</Option>
+                <Option value="Warning">Warning</Option>
+                <Option value="Exceeded">Exceeded</Option>
+              </Select>
+            </Col>
+          </Row>
         </div>
-        <Table
-          columns={columns}
-          dataSource={filteredBudgets}
-          rowKey="_id"
-          loading={loading}
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 800 }}
-          locale={{
-            emptyText: (
-              <div className="py-8">
-                <p className="text-gray-500 dark:text-gray-400 mb-4">No budgets found for this period.</p>
-                <Button type="primary" onClick={handleAdd}>Create your first budget</Button>
-              </div>
-            )
-          }}
-        />
-      </div>
+
+        {/* Table Section */}
+        <div className="overflow-hidden">
+          <div className="p-4 border-b border-gray-100 dark:border-fintech-border flex justify-between items-center bg-gray-50 dark:bg-fintech-bg/50 rounded-t-lg">
+            <Text strong className="dark:text-fintech-text">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days remaining)</Text>
+          </div>
+          <Table
+            columns={columns}
+            dataSource={filteredBudgets}
+            rowKey="_id"
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 800 }}
+            locale={{
+              emptyText: (
+                <div className="py-8">
+                  <p className="text-fintech-textMuted mb-4">No budgets found for this period.</p>
+                  <Button type="primary" onClick={handleAdd}>Create your first budget</Button>
+                </div>
+              )
+            }}
+          />
+        </div>
+      </SectionCard>
 
       <BudgetFormModal
         visible={isFormVisible}
