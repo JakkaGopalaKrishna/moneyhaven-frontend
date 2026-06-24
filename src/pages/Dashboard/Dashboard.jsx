@@ -197,8 +197,31 @@ const Dashboard = () => {
               </Card>
             </Col>
             <Col xs={24} md={12}>
-              <Card title={TITLES.INSIGHTS} className="h-full shadow-sm">
-                <Empty description={EMPTY_STATES.CHARTS} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              <Card title={TITLES.INSIGHTS} className="h-full shadow-sm" extra={<a onClick={() => navigate('/budgets')}>Budgets</a>}>
+                {summary?.budgetSummary ? (
+                  <div className="space-y-4">
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg flex justify-between items-center">
+                      <span className="text-red-700 dark:text-red-400 font-medium">Most Overspent</span>
+                      <span className="font-bold dark:text-white">
+                        {summary.budgetSummary.mostOverspent ? `${summary.budgetSummary.mostOverspent.category} (${summary.budgetSummary.mostOverspent.percentage.toFixed(0)}%)` : 'None'}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg flex justify-between items-center">
+                      <span className="text-green-700 dark:text-green-400 font-medium">Highest Remaining</span>
+                      <span className="font-bold dark:text-white">
+                        {summary.budgetSummary.highestRemaining ? `${summary.budgetSummary.highestRemaining.category} (${formatCurrency(summary.budgetSummary.highestRemaining.amount)})` : 'None'}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex justify-between items-center">
+                      <span className="text-blue-700 dark:text-blue-400 font-medium">Total Budget</span>
+                      <span className="font-bold dark:text-white">
+                        {formatCurrency(summary.budgetSummary.totalBudgetAmount)}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <Empty description={EMPTY_STATES.CHARTS} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )}
               </Card>
             </Col>
           </Row>
@@ -209,7 +232,7 @@ const Dashboard = () => {
           <Card title={LABELS.HEALTH_SCORE} className="shadow-sm text-center">
             <Progress 
               type="dashboard" 
-              percent={summary?.healthScore || 0} 
+              percent={summary?.budgetSummary?.budgetHealthScore || summary?.healthScore || 0} 
               format={(percent) => `${percent}/100`}
               strokeColor={{
                 '0%': '#ff4d4f',
