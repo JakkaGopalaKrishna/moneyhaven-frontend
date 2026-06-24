@@ -20,8 +20,8 @@ const logout = async () => {
   return response.data;
 };
 
-const sendOtp = async (email) => {
-  const response = await api.post('/auth/send-otp', { email });
+const sendOtp = async (data) => {
+  const response = await api.post('/auth/send-otp', data);
   return response.data;
 };
 
