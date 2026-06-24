@@ -12,6 +12,7 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    openingBalance: '',
   });
 
   const handleChange = (e) => {
@@ -22,6 +23,10 @@ const Register = () => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
+      return;
+    }
+    if (Number(formData.openingBalance) < 0) {
+      alert("Opening balance cannot be negative");
       return;
     }
     console.log('Register attempt:', formData);
@@ -68,9 +73,10 @@ const Register = () => {
           label="Password" 
           type="password" 
           name="password"
-          placeholder="Create a password" 
+          placeholder="Create a password (min 8 chars)" 
           value={formData.password}
           onChange={handleChange}
+          minLength={8}
           required
         />
         <AppInput 
@@ -80,7 +86,18 @@ const Register = () => {
           placeholder="Confirm your password" 
           value={formData.confirmPassword}
           onChange={handleChange}
+          minLength={8}
           required
+        />
+        <AppInput 
+          label="Opening Balance" 
+          type="number" 
+          name="openingBalance"
+          placeholder="0.00" 
+          value={formData.openingBalance}
+          onChange={handleChange}
+          min="0"
+          step="0.01"
         />
         
         <div className="pt-4">
