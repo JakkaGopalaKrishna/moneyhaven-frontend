@@ -8,6 +8,7 @@ import PublicRoute from './PublicRoute';
 // Pages
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
+import Transactions from '../pages/Transactions';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import NotFound from '../pages/NotFound/NotFound';
@@ -31,6 +32,7 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
             <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.TRANSACTIONS} element={<Transactions />} />
           </Route>
         </Route>
 
