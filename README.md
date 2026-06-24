@@ -1,16 +1,71 @@
-# React + Vite
+# MoneyHaven
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+MoneyHaven - Smart Personal Finance Platform
 
-Currently, two official plugins are available:
+## Project Overview
+MoneyHaven is a comprehensive personal finance dashboard application. This repository contains the frontend architecture, focusing on a clean, scalable, and responsive user interface built using modern web technologies.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+* React 19
+* Vite
+* Redux Toolkit & React Redux (with Redux Persist)
+* React Router DOM
+* Ant Design
+* Tailwind CSS
+* Axios
+* Framer Motion
 
-## React Compiler
+## Installation Steps
+1. Clone the repository.
+2. Ensure you have Node.js installed (v18+ recommended).
+3. Run `npm install` to install dependencies.
+4. Copy `.env.example` to `.env` and configure your variables.
+5. Run `npm run dev` to start the development server.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Environment Variables
+The application uses the following environment variables:
+* `VITE_API_URL`: The base URL for API requests (e.g., `http://localhost:5000/api`).
 
-## Expanding the Oxlint configuration
+## Folder Structure
+```text
+src/
+├── app/          # App-wide configuration (e.g., Redux store)
+├── assets/       # Static assets like images and global CSS
+├── components/   # Reusable UI components (common, layout)
+├── constants/    # Application constants (routes, storageKeys)
+├── hooks/        # Custom React hooks (useAuth, useTheme)
+├── layouts/      # Layout components (MainLayout, AuthLayout)
+├── pages/        # Application pages (Dashboard, Auth, Profile, Error)
+├── routes/       # React Router configurations (AppRoutes, ProtectedRoute)
+├── services/     # API services and configurations (axios instance)
+├── store/        # Redux slices and root reducer
+├── styles/       # Global styling files
+└── utils/        # Utility functions (localStorage wrappers)
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Development Workflow
+* Ensure your code follows the established ESLint and Prettier configurations.
+* Components should be organized functionally.
+* Reusable logic should be abstracted into hooks or utility functions.
+* Commit messages should follow conventional commits pattern.
+
+## Git Commit History
+This project follows a structured Git workflow. The initial setup commits are as follows:
+1. `chore: initialize vite react project`
+2. `chore: configure tailwind css`
+3. `chore: setup ant design`
+4. `chore: setup project folder structure`
+5. `feat: configure redux toolkit store`
+6. `feat: configure react router`
+7. `feat: setup axios api service`
+8. `feat: create responsive main layout`
+9. `feat: implement sidebar navigation`
+10. `feat: implement navbar component`
+11. `feat: implement mobile drawer navigation`
+12. `feat: add dark mode support`
+13. `feat: add protected route component`
+14. `feat: create reusable ui components`
+15. `feat: create placeholder pages`
+16. `feat: add framer motion animations`
+17. `docs: create frontend readme`
+18. `test: verify responsive layout`
