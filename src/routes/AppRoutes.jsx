@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ROUTES } from '../constants/routes';
 import MainLayout from '../layouts/MainLayout';
 import AuthLayout from '../layouts/AuthLayout';
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
 
 // Placeholder components for routing test
 const Placeholder = ({ title }) => (
@@ -17,15 +19,19 @@ const AppRoutes = () => {
         <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         
         {/* Auth Routes */}
-        <Route element={<AuthLayout />}>
-          <Route path={ROUTES.LOGIN} element={<Placeholder title="Login" />} />
-          <Route path={ROUTES.REGISTER} element={<Placeholder title="Register" />} />
+        <Route element={<PublicRoute />}>
+          <Route element={<AuthLayout />}>
+            <Route path={ROUTES.LOGIN} element={<Placeholder title="Login" />} />
+            <Route path={ROUTES.REGISTER} element={<Placeholder title="Register" />} />
+          </Route>
         </Route>
 
         {/* Main App Routes */}
-        <Route element={<MainLayout />}>
-          <Route path={ROUTES.DASHBOARD} element={<Placeholder title="Dashboard" />} />
-          <Route path={ROUTES.PROFILE} element={<Placeholder title="Profile" />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path={ROUTES.DASHBOARD} element={<Placeholder title="Dashboard" />} />
+            <Route path={ROUTES.PROFILE} element={<Placeholder title="Profile" />} />
+          </Route>
         </Route>
 
         {/* Not Found Route */}
