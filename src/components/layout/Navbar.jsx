@@ -1,10 +1,12 @@
-import { Avatar, Dropdown } from 'antd';
-import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Button } from 'antd';
+import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
+import useTheme from '../../hooks/useTheme';
 
 const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const userMenu = [
     {
@@ -47,7 +49,12 @@ const Navbar = ({ onMenuClick }) => {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Theme Toggle will go here */}
+        <Button 
+          type="text" 
+          icon={isDarkMode ? <SunOutlined className="text-yellow-500" /> : <MoonOutlined />} 
+          onClick={toggleTheme}
+          className="dark:text-white"
+        />
         
         <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
           <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
