@@ -31,6 +31,7 @@ src/
   3. Displays Ant Design `Input.OTP` with a 5-minute countdown timer.
   4. User verifies OTP. Frontend unlocks the "Create Account" button.
   5. Submits full form to `/api/auth/register` to auto-login.
+- **Profile Management:** Users can update `firstName`, `lastName`, and `openingBalance`. Avatars are uploaded via Ant Design `Upload` directly to the backend. Passwords can be changed with strict security requirements.
 - **JWT Based:** Tokens are saved in `Redux` and persisted to `localStorage` using `redux-persist`.
 - **Interceptors:** Axios interceptors attach the token automatically to outgoing requests.
 - **Protected Routes:** Unauthorized users are redirected to the Login page.
