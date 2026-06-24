@@ -5,12 +5,12 @@ import AuthLayout from '../layouts/AuthLayout';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 
-// Placeholder components for routing test
-const Placeholder = ({ title }) => (
-  <div className="p-8 flex items-center justify-center min-h-full">
-    <h1 className="text-3xl font-bold dark:text-white transition-colors duration-200">{title} Page</h1>
-  </div>
-);
+// Pages
+import Dashboard from '../pages/Dashboard';
+import Profile from '../pages/Profile';
+import Login from '../pages/Auth/Login';
+import Register from '../pages/Auth/Register';
+import NotFound from '../pages/NotFound/NotFound';
 
 const AppRoutes = () => {
   return (
@@ -21,21 +21,21 @@ const AppRoutes = () => {
         {/* Auth Routes */}
         <Route element={<PublicRoute />}>
           <Route element={<AuthLayout />}>
-            <Route path={ROUTES.LOGIN} element={<Placeholder title="Login" />} />
-            <Route path={ROUTES.REGISTER} element={<Placeholder title="Register" />} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTER} element={<Register />} />
           </Route>
         </Route>
 
         {/* Main App Routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
-            <Route path={ROUTES.DASHBOARD} element={<Placeholder title="Dashboard" />} />
-            <Route path={ROUTES.PROFILE} element={<Placeholder title="Profile" />} />
+            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.PROFILE} element={<Profile />} />
           </Route>
         </Route>
 
         {/* Not Found Route */}
-        <Route path={ROUTES.NOT_FOUND} element={<Placeholder title="Not Found" />} />
+        <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </Router>
   );
