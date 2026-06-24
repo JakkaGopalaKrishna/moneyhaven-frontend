@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Card, Tabs, Form, Input, Button, Upload, Progress, Statistic, Row, Col, message, Popconfirm, Avatar, Badge } from 'antd';
 import { UserOutlined, UploadOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { updateProfileUser, uploadAvatarUser, deleteAvatarUser, changePasswordUser } from '../../store/profileSlice';
+import { getDashboardSummaryUser } from '../../store/dashboardSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.profile);
+  const { summary } = useSelector((state) => state.dashboard);
   
   const [profileForm] = Form.useForm();
   const [passwordForm] = Form.useForm();
@@ -16,6 +18,7 @@ const Profile = () => {
   const avatarUrl = user?.avatar ? `${baseURL}${user.avatar}` : null;
 
   useEffect(() => {
+    dispatch(getDashboardSummaryUser());
     if (user) {
       profileForm.setFieldsValue({
         firstName: user.firstName,
@@ -23,7 +26,7 @@ const Profile = () => {
         openingBalance: user.openingBalance,
       });
     }
-  }, [user, profileForm]);
+  }, [user, profileForm, dispatch]);
 
   const handleProfileUpdate = async (values) => {
     try {
@@ -99,16 +102,16 @@ const Profile = () => {
       <Card title="Account Statistics">
         <Row gutter={[16, 16]}>
           <Col xs={12} sm={6}>
-            <Statistic title="Total Income" value={0} prefix="$" precision={2} valueStyle={{ color: '#3f8600' }} />
+            <Statistic title="Total Income" value={summary?.totalIncome || 0} prefix="₹" precision={2} valueStyle={{ color: '#3f8600' }} />
           </Col>
           <Col xs={12} sm={6}>
-            <Statistic title="Total Expenses" value={0} prefix="$" precision={2} valueStyle={{ color: '#cf1322' }} />
+            <Statistic title="Total Expenses" value={summary?.totalExpenses || 0} prefix="₹" precision={2} valueStyle={{ color: '#cf1322' }} />
           </Col>
           <Col xs={12} sm={6}>
-            <Statistic title="Current Balance" value={user?.openingBalance || 0} prefix="$" precision={2} />
+            <Statistic title="Current Balance" value={summary?.currentBalance !== undefined ? summary.currentBalance : (user?.openingBalance || 0)} prefix="₹" precision={2} />
           </Col>
           <Col xs={12} sm={6}>
-            <Statistic title="Total Transactions" value={0} />
+            <Statistic title="Total Transactions" value={summary?.totalTransactions || 0} />
           </Col>
         </Row>
       </Card>
