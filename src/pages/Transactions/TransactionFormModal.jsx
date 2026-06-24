@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, DatePicker, InputNumber, message } from 'antd';
+import React, { useEffect, useState, useRef } from 'react';
+import { Modal, Form, Input, Select, DatePicker, InputNumber, message, Divider, Space, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewTransaction, updateExistingTransaction } from '../../store/transactionSlice';
+import { createNewCategory } from '../../store/categorySlice';
 import { TRANSACTION_TYPES, PAYMENT_METHODS } from '../../constants/transactions';
 
 const { TextArea } = Input;
@@ -13,9 +15,31 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.transactions);
   const { categories } = useSelector((state) => state.categories);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const inputRef = useRef(null);
 
   // Watch type to reset category if type changes
   const selectedType = Form.useWatch('type', form);
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+    
+    try {
+      const res = await dispatch(createNewCategory({ 
+        name: newCategoryName, 
+        type: selectedType || TRANSACTION_TYPES.EXPENSE
+      })).unwrap();
+      
+      message.success('Category added');
+      setNewCategoryName('');
+      setTimeout(() => {
+        form.setFieldValue('categoryId', res.data._id);
+      }, 0);
+    } catch (err) {
+      message.error(err || 'Failed to add category');
+    }
+  };
 
   useEffect(() => {
     if (visible) {
@@ -124,7 +148,28 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
             className="w-1/2"
             rules={[{ required: true, message: 'Please select a category' }]}
           >
-            <Select placeholder="Select category">
+            <Select 
+              placeholder="Select category"
+              dropdownRender={(menu) => (
+                <>
+                  {menu}
+                  <Divider style={{ margin: '8px 0' }} />
+                  <Space style={{ padding: '0 8px 4px' }}>
+                    <Input
+                      placeholder="New category"
+                      ref={inputRef}
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      onKeyDown={(e) => e.stopPropagation()}
+                      onPressEnter={handleAddCategory}
+                    />
+                    <Button type="text" icon={<PlusOutlined />} onClick={handleAddCategory}>
+                      Add
+                    </Button>
+                  </Space>
+                </>
+              )}
+            >
               {categories.filter(c => c.type === selectedType).map(cat => (
                 <Option key={cat._id} value={cat._id}>{cat.name}</Option>
               ))}
