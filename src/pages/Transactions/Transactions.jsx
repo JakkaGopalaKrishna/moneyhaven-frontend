@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { 
   fetchTransactions, removeTransaction, clearTransactionError 
 } from '../../store/transactionSlice';
+import { fetchCategories } from '../../store/categorySlice';
 import { getDashboardSummaryUser } from '../../store/dashboardSlice';
 import TransactionFormModal from './TransactionFormModal';
 import TransactionDetailsDrawer from './TransactionDetailsDrawer';
@@ -23,6 +24,7 @@ const { Option } = Select;
 const Transactions = () => {
   const dispatch = useDispatch();
   const { transactions, loading, pagination, error } = useSelector((state) => state.transactions);
+  const { categories } = useSelector((state) => state.categories);
 
   // Local state for modals and drawer
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -46,6 +48,9 @@ const Transactions = () => {
 
   useEffect(() => {
     loadTransactions();
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
   }, [currentPage, pageSize, filters]);
 
   useEffect(() => {
@@ -155,11 +160,18 @@ const Transactions = () => {
     },
     {
       title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      render: (category) => (
-        <Tag color={CATEGORY_COLORS[category] || 'default'}>{category}</Tag>
-      ),
+      dataIndex: 'categoryId',
+      key: 'categoryId',
+      render: (categoryObj, record) => {
+        if (!categoryObj) {
+          return <Tag>{record.categoryNameSnapshot}</Tag>;
+        }
+        return (
+          <Tag color={categoryObj.color || 'default'}>
+            {categoryObj.name}
+          </Tag>
+        );
+      },
     },
     {
       title: 'Date',

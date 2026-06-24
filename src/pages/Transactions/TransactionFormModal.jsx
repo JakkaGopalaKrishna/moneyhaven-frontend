@@ -3,7 +3,7 @@ import { Modal, Form, Input, Select, DatePicker, InputNumber, message } from 'an
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewTransaction, updateExistingTransaction } from '../../store/transactionSlice';
-import { TRANSACTION_TYPES, CATEGORIES, PAYMENT_METHODS } from '../../constants/transactions';
+import { TRANSACTION_TYPES, PAYMENT_METHODS } from '../../constants/transactions';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -12,6 +12,7 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.transactions);
+  const { categories } = useSelector((state) => state.categories);
 
   // Watch type to reset category if type changes
   const selectedType = Form.useWatch('type', form);
@@ -21,6 +22,7 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
       if (transaction) {
         form.setFieldsValue({
           ...transaction,
+          categoryId: typeof transaction.categoryId === 'object' ? transaction.categoryId._id : transaction.categoryId,
           transactionDate: dayjs(transaction.transactionDate),
         });
       } else {
@@ -36,8 +38,10 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
 
   const handleSubmit = async (values) => {
     try {
+      const selectedCategory = categories.find(c => c._id === values.categoryId);
       const payload = {
         ...values,
+        categoryNameSnapshot: selectedCategory ? selectedCategory.name : '',
         transactionDate: values.transactionDate.toISOString(),
       };
 
@@ -80,7 +84,7 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
           label="Transaction Type"
           rules={[{ required: true, message: 'Please select a type' }]}
         >
-          <Select onChange={() => form.setFieldValue('category', undefined)}>
+          <Select onChange={() => form.setFieldValue('categoryId', undefined)}>
             <Option value={TRANSACTION_TYPES.INCOME}>Income</Option>
             <Option value={TRANSACTION_TYPES.EXPENSE}>Expense</Option>
           </Select>
@@ -115,14 +119,14 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
 
         <div className="flex gap-4">
           <Form.Item
-            name="category"
+            name="categoryId"
             label="Category"
             className="w-1/2"
             rules={[{ required: true, message: 'Please select a category' }]}
           >
             <Select placeholder="Select category">
-              {(CATEGORIES[selectedType] || []).map(cat => (
-                <Option key={cat} value={cat}>{cat}</Option>
+              {categories.filter(c => c.type === selectedType).map(cat => (
+                <Option key={cat._id} value={cat._id}>{cat.name}</Option>
               ))}
             </Select>
           </Form.Item>
