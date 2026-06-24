@@ -24,11 +24,19 @@ src/
 └── utils/        # Helper functions (e.g., localStorage)
 ```
 
-## Authentication System
+## Authentication & Registration Flow
+- **Registration with OTP:**
+  1. User enters personal details.
+  2. Frontend requests `/api/auth/send-otp`.
+  3. Displays Ant Design `Input.OTP` with a 5-minute countdown timer.
+  4. User verifies OTP. Frontend unlocks the "Create Account" button.
+  5. Submits full form to `/api/auth/register` to auto-login.
 - **JWT Based:** Tokens are saved in `Redux` and persisted to `localStorage` using `redux-persist`.
 - **Interceptors:** Axios interceptors attach the token automatically to outgoing requests.
 - **Protected Routes:** Unauthorized users are redirected to the Login page.
 - **Redux State Management:**
+  - `sendOtpUser`
+  - `verifyOtpUser`
   - `registerUser`
   - `loginUser`
   - `getCurrentUser`
