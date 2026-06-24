@@ -7,6 +7,7 @@ import categoryReducer from './categorySlice';
 import budgetReducer from './budgetSlice';
 import goalReducer from './goalSlice';
 import analyticsReducer from './analyticsSlice';
+import reportReducer from './reportSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   budgets: budgetReducer,
   goals: goalReducer,
   analytics: analyticsReducer,
+  reports: reportReducer,
 });
 
 export default rootReducer;
