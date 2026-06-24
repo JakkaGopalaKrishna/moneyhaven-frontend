@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Statistic, Progress, Button, Empty, Skeleton, Badge, Space, List } from 'antd';
+import { Card, Row, Col, Statistic, Progress, Button, Empty, Skeleton, Badge, Space, List, Tag } from 'antd';
 import { 
   WalletOutlined, 
   ArrowUpOutlined, 
@@ -11,11 +11,16 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
   PieChartOutlined,
-  FlagOutlined
+  FlagOutlined,
+  InfoCircleOutlined,
+  WarningOutlined,
+  CloseCircleOutlined,
+  CheckCircleOutlined
 } from '@ant-design/icons';
 import CountUp from 'react-countup';
 import { useNavigate } from 'react-router-dom';
 import { getDashboardSummaryUser, getDashboardStatsUser } from '../../store/dashboardSlice';
+import { fetchNotifications } from '../../store/notificationSlice';
 import { DASHBOARD_CONSTANTS } from '../../constants/dashboard';
 import { TRANSACTION_TYPES } from '../../constants/transactions';
 import { formatCurrency } from '../../utils/currencyFormatter';
@@ -43,11 +48,13 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { summary, stats, loading } = useSelector((state) => state.dashboard);
+  const { notifications } = useSelector((state) => state.notifications);
   const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
     dispatch(getDashboardSummaryUser());
     dispatch(getDashboardStatsUser());
+    dispatch(fetchNotifications('unread'));
     
     // Set greeting based on time
     const hour = new Date().getHours();
@@ -55,6 +62,16 @@ const Dashboard = () => {
     else if (hour < 18) setGreeting('Good Afternoon');
     else setGreeting('Good Evening');
   }, [dispatch]);
+
+  const getNotificationIcon = (severity) => {
+    switch(severity) {
+      case 'Info': return <InfoCircleOutlined className="text-blue-500" />;
+      case 'Warning': return <WarningOutlined className="text-orange-500" />;
+      case 'Critical': return <CloseCircleOutlined className="text-red-500" />;
+      case 'Success': return <CheckCircleOutlined className="text-green-500" />;
+      default: return <InfoCircleOutlined className="text-gray-500" />;
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(getDashboardSummaryUser());
@@ -243,6 +260,23 @@ const Dashboard = () => {
             <Button type="link" onClick={() => navigate('/analytics')} className="mt-2">
               View Full Analysis
             </Button>
+          </Card>
+
+          <Card title="Recent Alerts" className="shadow-sm" extra={<a onClick={() => navigate('/notifications')}>View All</a>}>
+            <List
+              itemLayout="horizontal"
+              dataSource={notifications.slice(0, 3)}
+              locale={{ emptyText: <div className="text-center text-gray-500 py-4">No new alerts</div> }}
+              renderItem={(item) => (
+                <List.Item className="border-b border-gray-50 dark:border-gray-800 last:border-0 p-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md" onClick={() => item.actionUrl && navigate(item.actionUrl)}>
+                  <List.Item.Meta
+                    avatar={<div className="mt-1">{getNotificationIcon(item.severity)}</div>}
+                    title={<span className="text-sm font-medium dark:text-white line-clamp-1">{item.title}</span>}
+                    description={<span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{item.message}</span>}
+                  />
+                </List.Item>
+              )}
+            />
           </Card>
 
           <Card title={TITLES.ACTIONS} className="shadow-sm">
