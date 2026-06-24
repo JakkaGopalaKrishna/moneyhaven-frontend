@@ -258,76 +258,130 @@ const Goals = () => {
           action={<Button type="primary" onClick={handleAddGoal}>Create a Goal</Button>}
         />
       ) : (
-        <Row gutter={[24, 24]}>
-          {filteredGoals.map(goal => (
-            <Col xs={24} sm={12} lg={8} key={goal._id}>
-              <SectionCard 
-                className={`${goal.status === 'Completed' ? 'border-green-200 bg-green-50/30' : ''}`}
-                actions={[
-                  <Button type="text" icon={<PlusOutlined />} onClick={() => handleAddSavings(goal)} disabled={goal.status === 'Completed'}>Add Savings</Button>,
-                  <Button type="text" icon={<EyeOutlined />} onClick={() => handleViewGoal(goal)}>Details</Button>,
-                ]}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <div className="text-lg font-semibold truncate pr-2 dark:text-white" title={goal.title}>{goal.title}</div>
-                    <Text className="text-fintech-textMuted text-xs">{goal.category}</Text>
-                  </div>
-                  <Dropdown
-                    overlay={
-                      <Menu>
-                        <Menu.Item key="edit" icon={<EditOutlined />} onClick={() => handleEditGoal(goal)} disabled={goal.status === 'Completed'}>Edit</Menu.Item>
-                        <Menu.Item key="delete" danger icon={<DeleteOutlined />} onClick={() => handleDeleteGoal(goal._id)}>Delete</Menu.Item>
-                      </Menu>
-                    }
-                    trigger={['click']}
+        <>
+          {/* Desktop Grid */}
+          <div className="hidden md:block">
+            <Row gutter={[24, 24]}>
+              {filteredGoals.map(goal => (
+                <Col xs={24} sm={12} lg={8} key={goal._id}>
+                  <SectionCard 
+                    className={`${goal.status === 'Completed' ? 'border-green-200 bg-green-50/30' : ''}`}
+                    actions={[
+                      <Button type="text" icon={<PlusOutlined />} onClick={() => handleAddSavings(goal)} disabled={goal.status === 'Completed'}>Add Savings</Button>,
+                      <Button type="text" icon={<EyeOutlined />} onClick={() => handleViewGoal(goal)}>Details</Button>,
+                    ]}
                   >
-                    <Button type="text" icon={<EllipsisOutlined />} />
-                  </Dropdown>
-                </div>
-
-                <div className="flex justify-center mb-4">
-                  <Progress 
-                    type="dashboard" 
-                    percent={goal.progressPercentage} 
-                    strokeColor={getHealthColor(goal.healthStatus)}
-                    format={pct => (
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg font-bold dark:text-white">{pct}%</span>
-                        <span className="text-xs text-fintech-textMuted font-normal">{goal.healthStatus}</span>
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <div className="text-lg font-semibold truncate pr-2 dark:text-white" title={goal.title}>{goal.title}</div>
+                        <Text className="text-fintech-textMuted text-xs">{goal.category}</Text>
                       </div>
-                    )}
-                  />
+                      <Dropdown
+                        overlay={
+                          <Menu>
+                            <Menu.Item key="edit" icon={<EditOutlined />} onClick={() => handleEditGoal(goal)} disabled={goal.status === 'Completed'}>Edit</Menu.Item>
+                            <Menu.Item key="delete" danger icon={<DeleteOutlined />} onClick={() => handleDeleteGoal(goal._id)}>Delete</Menu.Item>
+                          </Menu>
+                        }
+                        trigger={['click']}
+                      >
+                        <Button type="text" icon={<EllipsisOutlined />} />
+                      </Dropdown>
+                    </div>
+
+                    <div className="flex justify-center mb-4">
+                      <Progress 
+                        type="dashboard" 
+                        percent={goal.progressPercentage} 
+                        strokeColor={getHealthColor(goal.healthStatus)}
+                        format={pct => (
+                          <div className="flex flex-col items-center">
+                            <span className="text-lg font-bold dark:text-white">{pct}%</span>
+                            <span className="text-xs text-fintech-textMuted font-normal">{goal.healthStatus}</span>
+                          </div>
+                        )}
+                      />
+                    </div>
+
+                    <div className="space-y-2 mt-2">
+                      <div className="flex justify-between text-sm">
+                        <Text className="text-fintech-textMuted">Saved:</Text>
+                        <Text className="text-fintech-success font-semibold">{formatCurrency(goal.savedAmount)}</Text>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <Text className="text-fintech-textMuted">Target:</Text>
+                        <Text className="font-semibold dark:text-white">{formatCurrency(goal.targetAmount)}</Text>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <Text className="text-fintech-textMuted">Remaining:</Text>
+                        <Text className="font-semibold dark:text-white">{formatCurrency(goal.remainingAmount)}</Text>
+                      </div>
+                      
+                      <div className="pt-3 border-t border-fintech-border/50 flex justify-between items-center text-xs mt-3">
+                        <Space>
+                          <CalendarOutlined className="text-fintech-textMuted" />
+                          <Text className="text-fintech-textMuted">{dayjs(goal.targetDate).format('MMM D, YYYY')}</Text>
+                        </Space>
+                        <Tag color={goal.daysRemaining <= 14 && goal.status === 'Active' ? 'error' : 'default'} bordered={false}>
+                          {goal.status === 'Completed' ? 'Achieved' : `${goal.daysRemaining} days left`}
+                        </Tag>
+                      </div>
+                    </div>
+                  </SectionCard>
+                </Col>
+              ))}
+            </Row>
+          </div>
+
+          {/* Mobile Horizontal Scroll */}
+          <div className="md:hidden flex gap-4 overflow-x-auto snap-x pb-4 px-1 hide-scrollbar">
+            {filteredGoals.map(goal => (
+              <div key={goal._id} className="snap-center min-w-[280px] w-[280px] bg-white dark:bg-fintech-surface border border-gray-100 dark:border-fintech-border rounded-2xl p-4 shadow-sm flex flex-col justify-between cursor-pointer active:scale-95 transition-transform" onClick={() => handleViewGoal(goal)}>
+                <div className="flex justify-between items-start mb-3">
+                  <div className="truncate pr-2">
+                    <div className="text-sm font-semibold truncate dark:text-white" title={goal.title}>{goal.title}</div>
+                    <div className="text-xs text-fintech-textMuted">{goal.category}</div>
+                  </div>
                 </div>
 
-                <div className="space-y-2 mt-2">
-                  <div className="flex justify-between text-sm">
-                    <Text className="text-fintech-textMuted">Saved:</Text>
-                    <Text className="text-fintech-success font-semibold">{formatCurrency(goal.savedAmount)}</Text>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <Text className="text-fintech-textMuted">Target:</Text>
-                    <Text className="font-semibold dark:text-white">{formatCurrency(goal.targetAmount)}</Text>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <Text className="text-fintech-textMuted">Remaining:</Text>
-                    <Text className="font-semibold dark:text-white">{formatCurrency(goal.remainingAmount)}</Text>
-                  </div>
-                  
-                  <div className="pt-3 border-t border-fintech-border/50 flex justify-between items-center text-xs mt-3">
-                    <Space>
-                      <CalendarOutlined className="text-fintech-textMuted" />
-                      <Text className="text-fintech-textMuted">{dayjs(goal.targetDate).format('MMM D, YYYY')}</Text>
-                    </Space>
-                    <Tag color={goal.daysRemaining <= 14 && goal.status === 'Active' ? 'error' : 'default'} bordered={false}>
-                      {goal.status === 'Completed' ? 'Achieved' : `${goal.daysRemaining} days left`}
-                    </Tag>
+                <div className="flex items-center gap-4 mb-3">
+                  <Progress 
+                    type="circle" 
+                    percent={goal.progressPercentage} 
+                    width={50} 
+                    strokeColor={getHealthColor(goal.healthStatus)} 
+                    format={pct => <span className="text-[10px] font-bold">{pct}%</span>} 
+                  />
+                  <div className="flex-1">
+                    <div className="flex justify-between text-[10px] mb-1">
+                      <span className="text-fintech-textMuted">Saved</span>
+                      <span className="font-semibold text-fintech-success">{formatCurrency(goal.savedAmount)}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-fintech-textMuted">Target</span>
+                      <span className="font-semibold dark:text-white">{formatCurrency(goal.targetAmount)}</span>
+                    </div>
                   </div>
                 </div>
-              </SectionCard>
-            </Col>
-          ))}
-        </Row>
+
+                <div className="pt-3 border-t border-fintech-border/50 flex justify-between items-center mt-auto">
+                  <div className="text-[10px] font-medium text-fintech-textMuted flex items-center gap-1">
+                    <CalendarOutlined /> {goal.daysRemaining} days left
+                  </div>
+                  <Button 
+                    type="primary" 
+                    size="small" 
+                    className="text-[10px] px-3 h-6 rounded-md" 
+                    onClick={(e) => { e.stopPropagation(); handleAddSavings(goal); }} 
+                    disabled={goal.status === 'Completed'}
+                  >
+                    Add Funds
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Modals */}

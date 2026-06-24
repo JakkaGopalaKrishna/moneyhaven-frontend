@@ -141,13 +141,13 @@ const Analytics = () => {
         </Col>
       </Row>
 
-      <Row gutter={[24, 24]}>
-        {/* Charts Panel */}
-        <Col xs={24} lg={16} className="space-y-6">
-          <SectionCard title="Income vs Expense Trend">
-            <div className="h-[320px] md:h-[350px] lg:h-[400px]">
+      <Row gutter={[24, 24]} className="flex-wrap">
+        {/* Income vs Expense Trend */}
+        <Col xs={{ span: 24, order: 2 }} lg={{ span: 16, order: 1 }}>
+          <SectionCard title="Income vs Expense Trend" className="p-2 md:p-5 h-full">
+            <div className="h-[220px] md:h-[350px] lg:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={monthlyTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <AreaChart data={monthlyTrendData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
@@ -158,89 +158,114 @@ const Analytics = () => {
                       <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" stroke="#9ca3af" tick={{ fontSize: 12 }} />
-                  <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} width={60} />
+                  <XAxis dataKey="name" stroke="#9ca3af" tick={{ fontSize: 10 }} minTickGap={15} />
+                  <YAxis stroke="#9ca3af" tick={{ fontSize: 10 }} width={55} tickFormatter={(val) => `₹${val >= 1000 ? (val/1000).toFixed(0) + 'k' : val}`} />
                   <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
-                  <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '5px' }} />
                   <Area type="monotone" dataKey="Income" stroke="#22c55e" fillOpacity={1} fill="url(#colorIncome)" />
                   <Area type="monotone" dataKey="Expense" stroke="#ef4444" fillOpacity={1} fill="url(#colorExpense)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </SectionCard>
-
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <SectionCard title="Expense Breakdown">
-                <div className="h-[300px] md:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart margin={{ top: 0, right: 0, bottom: 20, left: 0 }}>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={75}
-                        paddingAngle={5}
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
-                      <Legend wrapperStyle={{ fontSize: '12px' }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </SectionCard>
-            </Col>
-            <Col xs={24} md={12}>
-              <SectionCard title="Budget Utilization">
-                <div className="h-[300px] md:h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={budgets?.budgetUtilization || []} layout="vertical" margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis type="number" hide />
-                      <YAxis dataKey="category" type="category" width={100} stroke="#9ca3af" tick={{ fontSize: 11 }} />
-                      <RechartsTooltip formatter={(val) => `${val}%`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
-                      <Bar dataKey="utilizationPercentage" fill="#3b82f6" radius={[0, 4, 4, 0]}>
-                        {(budgets?.budgetUtilization || []).map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.utilizationPercentage > 100 ? '#ef4444' : '#3b82f6'} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </SectionCard>
-            </Col>
-          </Row>
         </Col>
 
-        {/* Health & Insights Panel */}
-        <Col xs={24} lg={8} className="space-y-6">
-          <SectionCard title="Financial Health Score" className="text-center">
-            <Progress 
-              type="dashboard" 
-              percent={health?.score || 0} 
-              strokeColor={{
-                '0%': '#ef4444',
-                '50%': '#f59e0b',
-                '100%': '#22c55e',
-              }}
-              format={pct => (
-                <div className="flex flex-col items-center">
-                  <span className="text-3xl font-bold dark:text-white">{pct}</span>
-                  <span className="text-xs text-fintech-textMuted font-normal mt-1">
-                    {pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Average' : 'Needs Work'}
-                  </span>
-                </div>
-              )}
-            />
+        {/* Expense Breakdown */}
+        <Col xs={{ span: 24, order: 3 }} lg={{ span: 8, order: 2 }}>
+          <SectionCard title="Expense Breakdown" className="p-2 md:p-5 h-full">
+            <div className="h-[250px] md:h-[300px] lg:h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={5}
+                    dataKey="value"
+                    labelLine={false}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </SectionCard>
+        </Col>
 
-          <SectionCard title="Insights Engine">
-            <div className="space-y-4">
+        {/* Budget Utilization */}
+        <Col xs={{ span: 24, order: 4 }} lg={{ span: 8, order: 3 }}>
+          <SectionCard title="Budget Utilization" className="p-2 md:p-5 h-full">
+            <div className="h-[250px] md:h-[300px] lg:h-[260px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={budgets?.budgetUtilization || []} layout="vertical" margin={{ top: 5, right: 10, bottom: 5, left: -25 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={true} vertical={false} />
+                  <XAxis type="number" hide />
+                  <YAxis dataKey="category" type="category" width={80} stroke="#9ca3af" tick={{ fontSize: 10 }} />
+                  <RechartsTooltip formatter={(val) => `${val}%`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
+                  <Bar dataKey="utilizationPercentage" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20}>
+                    {(budgets?.budgetUtilization || []).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.utilizationPercentage > 100 ? '#ef4444' : '#3b82f6'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </SectionCard>
+        </Col>
+
+        {/* Health Score */}
+        <Col xs={{ span: 24, order: 1 }} lg={{ span: 8, order: 4 }}>
+          <SectionCard title="Financial Health Score" className="text-center h-full flex flex-col justify-center">
+            <div className="flex justify-center items-center lg:h-[260px]">
+              <Progress 
+                type="dashboard" 
+                percent={health?.score || 0} 
+                size={180}
+                strokeColor={{
+                  '0%': '#ef4444',
+                  '50%': '#f59e0b',
+                  '100%': '#22c55e',
+                }}
+                format={pct => (
+                  <div className="flex flex-col items-center">
+                    <span className="text-3xl font-bold dark:text-white">{pct}</span>
+                    <span className="text-xs text-fintech-textMuted font-normal mt-1">
+                      {pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Average' : 'Needs Work'}
+                    </span>
+                  </div>
+                )}
+              />
+            </div>
+          </SectionCard>
+        </Col>
+
+        {/* Forecast */}
+        <Col xs={{ span: 24, order: 7 }} lg={{ span: 8, order: 5 }}>
+          <SectionCard title="AI Forecast" className="h-full flex flex-col justify-center">
+            <div className="flex flex-col justify-center gap-4 lg:h-[260px]">
+              <div className="flex justify-between items-center text-sm p-4 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                <Text className="text-fintech-textMuted">Next Month Est. Expense</Text>
+                <Text className="font-bold dark:text-white text-lg">₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
+              </div>
+              <div className="flex justify-between items-center text-sm p-4 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                <Text className="text-fintech-textMuted">Confidence Level</Text>
+                <Tag color="cyan" className="m-0 px-3 py-1 text-sm">{forecast?.monthlyExpenseForecast?.confidence}%</Tag>
+              </div>
+            </div>
+          </SectionCard>
+        </Col>
+
+        {/* Insights */}
+        <Col xs={{ span: 24, order: 5 }} lg={{ span: 12, order: 6 }}>
+          <SectionCard title="Insights Engine" className="h-full">
+            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {insights?.insights?.length === 0 && <EmptyState description="No insights yet." icon={<InfoCircleOutlined />} />}
               {insights?.insights?.map((insight, idx) => (
                 <div key={idx} className="flex items-start gap-3 p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
@@ -250,30 +275,22 @@ const Analytics = () => {
               ))}
             </div>
           </SectionCard>
+        </Col>
 
-          <SectionCard title="Recommendations" className="bg-blue-50/50 dark:bg-fintech-primary/10">
-            <div className="space-y-4">
+        {/* Recommendations */}
+        <Col xs={{ span: 24, order: 6 }} lg={{ span: 12, order: 7 }}>
+          <SectionCard title="Recommendations" className="bg-blue-50/50 dark:bg-fintech-primary/10 h-full">
+            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {insights?.recommendations?.length === 0 && <Text className="text-fintech-textMuted">No specific recommendations.</Text>}
               {insights?.recommendations?.map((rec, idx) => (
-                <div key={idx} className="border-l-2 border-fintech-primary pl-4">
+                <div key={idx} className="border-l-2 border-fintech-primary pl-4 bg-white/50 dark:bg-fintech-surface/50 p-3 rounded-r-xl">
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-medium text-sm dark:text-white">{rec.title}</span>
-                    <Tag color={getPriorityColor(rec.priority)}>{rec.priority}</Tag>
+                    <Tag color={getPriorityColor(rec.priority)} className="m-0 text-[10px]">{rec.priority}</Tag>
                   </div>
                   <Text className="text-fintech-textMuted text-xs block">{rec.description}</Text>
                 </div>
               ))}
-            </div>
-          </SectionCard>
-
-          <SectionCard title="AI Forecast">
-            <div className="flex justify-between items-center text-sm p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
-              <Text className="text-fintech-textMuted">Next Month Est. Expense</Text>
-              <Text className="font-bold dark:text-white">₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
-            </div>
-            <div className="flex justify-between items-center text-sm mt-3 p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
-              <Text className="text-fintech-textMuted">Confidence</Text>
-              <Tag color="cyan" className="m-0">{forecast?.monthlyExpenseForecast?.confidence}%</Tag>
             </div>
           </SectionCard>
         </Col>

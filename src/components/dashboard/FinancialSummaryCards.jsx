@@ -34,31 +34,33 @@ const SummaryCard = ({ title, amount, trend, trendUp, isPrimary, delay }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
-      className={`rounded-2xl p-5 border ${
+      className={`rounded-2xl p-3 md:p-5 border flex flex-col justify-between ${
         isPrimary 
-          ? 'bg-fintech-surface/80 border-fintech-border shadow-card col-span-1 md:col-span-2 lg:col-span-1' 
-          : 'bg-white dark:bg-fintech-surface/50 border-gray-100 dark:border-fintech-border/50 shadow-soft'
+          ? 'bg-fintech-surface/80 border-fintech-border shadow-card col-span-2 md:col-span-2 lg:col-span-1' 
+          : 'bg-white dark:bg-fintech-surface/50 border-gray-100 dark:border-fintech-border/50 shadow-soft col-span-1'
       }`}
     >
-      <div className="flex justify-between items-start mb-2">
-        <h3 className={`text-sm font-medium ${isPrimary ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
+      <div className="flex justify-between items-start mb-1 md:mb-2">
+        <h3 className={`text-xs md:text-sm font-medium ${isPrimary ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
           {title}
         </h3>
-        <div className={`flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+        <div className={`flex items-center text-[10px] md:text-xs font-medium px-1.5 py-0.5 rounded-full ${
           trendUp 
             ? 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-500/10' 
             : 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-500/10'
         }`}>
-          {trendUp ? <ArrowUpOutlined className="mr-1" /> : <ArrowDownOutlined className="mr-1" />}
+          {trendUp ? <ArrowUpOutlined className="mr-0.5 md:mr-1" /> : <ArrowDownOutlined className="mr-0.5 md:mr-1" />}
           {trend}%
         </div>
       </div>
       
-      <div className="flex justify-between items-end">
-        <div className={`font-bold tracking-tight ${isPrimary ? 'text-3xl text-gray-900 dark:text-white' : 'text-2xl text-gray-800 dark:text-gray-100'}`}>
+      <div className="flex justify-between items-end mt-1 md:mt-0">
+        <div className={`font-bold tracking-tight truncate ${isPrimary ? 'text-xl md:text-3xl text-gray-900 dark:text-white' : 'text-lg md:text-2xl text-gray-800 dark:text-gray-100'}`}>
           {formatCurrency(amount)}
         </div>
-        <MiniSparkline color={trendUp ? '#22c55e' : '#ef4444'} />
+        <div className="hidden md:block">
+          <MiniSparkline color={trendUp ? '#22c55e' : '#ef4444'} />
+        </div>
       </div>
     </motion.div>
   );
@@ -66,7 +68,7 @@ const SummaryCard = ({ title, amount, trend, trendUp, isPrimary, delay }) => {
 
 const FinancialSummaryCards = ({ summary }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
       <SummaryCard 
         title="Total Balance" 
         amount={summary?.currentBalance || 0} 

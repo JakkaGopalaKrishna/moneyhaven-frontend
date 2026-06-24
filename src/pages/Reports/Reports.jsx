@@ -195,7 +195,7 @@ const Reports = () => {
               </Button>
               <Button 
                 block 
-                className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100"
+                className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800/50 hover:dark:bg-green-900/40"
                 icon={<FileExcelOutlined />} 
                 onClick={() => handleExport('excel')}
                 loading={exportFormat === 'excel'}
@@ -205,7 +205,7 @@ const Reports = () => {
               </Button>
               <Button 
                 block 
-                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
+                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/50 hover:dark:bg-blue-900/40"
                 icon={<FileTextOutlined />} 
                 onClick={() => handleExport('csv')}
                 loading={exportFormat === 'csv'}

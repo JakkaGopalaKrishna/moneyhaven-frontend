@@ -102,7 +102,7 @@ const Notifications = () => {
           locale={{ emptyText: <Empty description="No notifications found" /> }}
           renderItem={(item) => (
             <List.Item
-              className={`p-4 mb-2 rounded-lg cursor-pointer transition-colors border ${
+              className={`p-3 md:p-4 mb-2 md:mb-3 rounded-xl md:rounded-lg cursor-pointer transition-colors border shadow-sm md:shadow-none ${
                 item.isRead ? 'bg-white border-gray-100 hover:bg-gray-50 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-750' 
                   : 'bg-blue-50 border-blue-100 hover:bg-blue-100 dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-600'
               }`}
@@ -110,30 +110,30 @@ const Notifications = () => {
               actions={[
                 !item.isRead && (
                   <Tooltip title="Mark as read" key="read">
-                    <Button type="text" shape="circle" icon={<CheckOutlined />} onClick={(e) => handleMarkAsRead(e, item._id)} />
+                    <Button type="text" shape="circle" size="small" className="md:w-8 md:h-8" icon={<CheckOutlined />} onClick={(e) => handleMarkAsRead(e, item._id)} />
                   </Tooltip>
                 ),
                 <Tooltip title="Archive" key="archive">
-                  <Button type="text" shape="circle" danger icon={<DeleteOutlined />} onClick={(e) => handleArchive(e, item._id)} />
+                  <Button type="text" shape="circle" size="small" danger className="md:w-8 md:h-8" icon={<DeleteOutlined />} onClick={(e) => handleArchive(e, item._id)} />
                 </Tooltip>
               ].filter(Boolean)}
             >
               <List.Item.Meta
-                avatar={<div className="mt-1">{getIcon(item.severity)}</div>}
+                avatar={<div className="mt-1 md:mt-2 text-lg md:text-xl">{getIcon(item.severity)}</div>}
                 title={
-                  <div className="flex justify-between items-center w-full">
-                    <span className={`font-semibold ${!item.isRead ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full gap-1 md:gap-0">
+                    <span className={`font-semibold text-sm md:text-base pr-2 ${!item.isRead ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
                       {item.title}
                     </span>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-between md:justify-end space-x-2">
                       {getPriorityTag(item.priority)}
-                      <Text type="secondary" className="text-xs">{dayjs(item.createdAt).fromNow()}</Text>
+                      <Text type="secondary" className="text-[10px] md:text-xs">{dayjs(item.createdAt).fromNow()}</Text>
                     </div>
                   </div>
                 }
                 description={
                   <div className="mt-1">
-                    <Text className={!item.isRead ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}>
+                    <Text className={`line-clamp-2 text-xs md:text-sm ${!item.isRead ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>
                       {item.message}
                     </Text>
                   </div>

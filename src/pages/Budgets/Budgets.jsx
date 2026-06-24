@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Table, Button, Space, Tag, Modal, message, Select, Row, Col, Typography, Statistic, Progress, Alert 
+  Table, Button, Space, Tag, Modal, message, Select, Row, Col, Typography, Statistic, Progress, Alert, List 
 } from 'antd';
 import { 
   PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, DashboardOutlined, 
@@ -16,6 +16,7 @@ import { formatCurrency } from '../../utils/currencyFormatter';
 import dayjs from 'dayjs';
 import PageHeader from '../../components/common/PageHeader';
 import SectionCard from '../../components/common/SectionCard';
+import EmptyState from '../../components/common/EmptyState';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -314,8 +315,8 @@ const Budgets = () => {
           </Row>
         </div>
 
-        {/* Table Section */}
-        <div className="overflow-hidden">
+        {/* Desktop Table Section */}
+        <div className="hidden md:block overflow-hidden">
           <div className="p-4 border-b border-gray-100 dark:border-fintech-border flex justify-between items-center bg-gray-50 dark:bg-fintech-bg/50 rounded-t-lg">
             <Text strong className="dark:text-fintech-text">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days remaining)</Text>
           </div>
@@ -334,6 +335,54 @@ const Budgets = () => {
                 </div>
               )
             }}
+          />
+        </div>
+
+        {/* Mobile Cards Section */}
+        <div className="block md:hidden">
+          <div className="p-3 border-b border-gray-100 dark:border-fintech-border flex justify-between items-center bg-gray-50 dark:bg-fintech-bg/50 rounded-t-lg mb-3">
+            <Text className="dark:text-fintech-text text-xs font-medium">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days left)</Text>
+          </div>
+          <List
+            dataSource={filteredBudgets}
+            rowKey="_id"
+            loading={loading}
+            pagination={{ pageSize: 10, size: "small", className: "text-center mt-4", hideOnSinglePage: true }}
+            locale={{ emptyText: <EmptyState title="No Budgets" description="Create your first budget." action={<Button type="primary" size="small" onClick={handleAdd}>Create</Button>} /> }}
+            renderItem={item => (
+              <div className="bg-fintech-bg/30 border border-fintech-border/50 p-4 rounded-xl mb-3 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-2">
+                    <Tag color={item.category?.color || 'default'} className="m-0 border-0 rounded-md text-[10px]">
+                      {item.category?.name}
+                    </Tag>
+                    <Tag color={getStatusColor(item.status)} className="m-0 border-0 text-[10px]">
+                      {item.status}
+                    </Tag>
+                  </div>
+                  <div className="flex gap-1">
+                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EyeOutlined />} onClick={() => handleView(item)} />
+                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EditOutlined />} onClick={() => handleEdit(item)} />
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-fintech-textMuted">Spent: {formatCurrency(item.spentAmount)}</span>
+                    <span className="font-medium text-fintech-text">{formatCurrency(item.amount)}</span>
+                  </div>
+                  <Progress 
+                    percent={item.percentageUsed} 
+                    strokeColor={item.percentageUsed > 90 ? '#ef4444' : item.percentageUsed > 75 ? '#f59e0b' : '#3b82f6'} 
+                    showInfo={false} 
+                    size="small"
+                  />
+                  <div className="text-[10px] text-right mt-1 text-fintech-textMuted">
+                    {formatCurrency(item.remainingAmount)} left
+                  </div>
+                </div>
+              </div>
+            )}
           />
         </div>
       </SectionCard>
