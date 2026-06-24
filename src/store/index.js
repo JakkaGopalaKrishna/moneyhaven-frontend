@@ -4,6 +4,7 @@ import profileReducer from './profileSlice';
 import dashboardReducer from './dashboardSlice';
 import transactionReducer from './transactionSlice';
 import categoryReducer from './categorySlice';
+import budgetReducer from './budgetSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   dashboard: dashboardReducer,
   transactions: transactionReducer,
   categories: categoryReducer,
+  budgets: budgetReducer,
 });
 
 export default rootReducer;
