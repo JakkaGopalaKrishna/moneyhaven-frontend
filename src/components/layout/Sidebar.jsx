@@ -81,7 +81,7 @@ const Sidebar = () => {
         <div className="flex items-center gap-3 px-2 py-2">
           <Avatar src={user?.avatar} icon={!user?.avatar && <UserOutlined />} className="bg-fintech-primary flex-shrink-0" />
           <div className="flex flex-col overflow-hidden">
-            <Text className="text-sm font-semibold dark:text-fintech-text truncate">
+            <Text className="text-sm font-semibold text-gray-900 dark:text-fintech-text truncate">
               {user?.firstName} {user?.lastName}
             </Text>
             <Text className="text-xs text-gray-500 dark:text-fintech-textMuted truncate">

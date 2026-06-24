@@ -36,7 +36,7 @@ const SummaryCard = ({ title, amount, trend, trendUp, isPrimary, delay }) => {
       transition={{ duration: 0.4, delay }}
       className={`rounded-2xl p-3 md:p-5 border flex flex-col justify-between ${
         isPrimary 
-          ? 'bg-fintech-surface/80 border-fintech-border shadow-card col-span-2 md:col-span-2 lg:col-span-1' 
+          ? 'bg-white dark:bg-fintech-surface/80 border-gray-200 dark:border-fintech-border shadow-card col-span-2 md:col-span-2 lg:col-span-1' 
           : 'bg-white dark:bg-fintech-surface/50 border-gray-100 dark:border-fintech-border/50 shadow-soft col-span-1'
       }`}
     >

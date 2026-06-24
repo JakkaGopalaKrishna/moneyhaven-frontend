@@ -242,8 +242,8 @@ const Analytics = () => {
                 }}
                 format={pct => (
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-bold dark:text-white">{pct}</span>
-                    <span className="text-xs text-fintech-textMuted font-normal mt-1">
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white">{pct}</span>
+                    <span className="text-xs text-gray-500 dark:text-fintech-textMuted font-normal mt-1">
                       {pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Average' : 'Needs Work'}
                     </span>
                   </div>
@@ -257,12 +257,12 @@ const Analytics = () => {
         <Col xs={{ span: 24, order: 7 }} lg={{ span: 8, order: 5 }}>
           <SectionCard title="AI Forecast" className="h-full flex flex-col justify-center">
             <div className="flex flex-col justify-center gap-4 lg:h-[260px]">
-              <div className="flex justify-between items-center text-sm p-4 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
-                <Text className="text-fintech-textMuted">Next Month Est. Expense</Text>
-                <Text className="font-bold dark:text-white text-lg">₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
+              <div className="flex justify-between items-center text-sm p-4 bg-gray-50 dark:bg-fintech-bg/50 rounded-xl border border-gray-200 dark:border-fintech-border/30">
+                <Text className="text-gray-500 dark:text-fintech-textMuted">Next Month Est. Expense</Text>
+                <Text className="font-bold text-gray-900 dark:text-white text-lg">₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
               </div>
-              <div className="flex justify-between items-center text-sm p-4 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
-                <Text className="text-fintech-textMuted">Confidence Level</Text>
+              <div className="flex justify-between items-center text-sm p-4 bg-gray-50 dark:bg-fintech-bg/50 rounded-xl border border-gray-200 dark:border-fintech-border/30">
+                <Text className="text-gray-500 dark:text-fintech-textMuted">Confidence Level</Text>
                 <Tag color="cyan" className="m-0 px-3 py-1 text-sm">{forecast?.monthlyExpenseForecast?.confidence}%</Tag>
               </div>
             </div>
@@ -275,9 +275,9 @@ const Analytics = () => {
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {insights?.insights?.length === 0 && <EmptyState description="No insights yet." icon={<InfoCircleOutlined />} />}
               {insights?.insights?.map((insight, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-fintech-bg/50 rounded-xl border border-gray-200 dark:border-fintech-border/30">
                   <div className="mt-0.5">{getSeverityIcon(insight.severity)}</div>
-                  <span className="text-sm dark:text-fintech-text">{insight.message}</span>
+                  <span className="text-sm text-gray-900 dark:text-fintech-text">{insight.message}</span>
                 </div>
               ))}
             </div>
@@ -288,14 +288,14 @@ const Analytics = () => {
         <Col xs={{ span: 24, order: 6 }} lg={{ span: 12, order: 7 }}>
           <SectionCard title="Recommendations" className="bg-blue-50/50 dark:bg-fintech-primary/10 h-full">
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              {insights?.recommendations?.length === 0 && <Text className="text-fintech-textMuted">No specific recommendations.</Text>}
+              {insights?.recommendations?.length === 0 && <Text className="text-gray-500 dark:text-fintech-textMuted">No specific recommendations.</Text>}
               {insights?.recommendations?.map((rec, idx) => (
                 <div key={idx} className="border-l-2 border-fintech-primary pl-4 bg-white/50 dark:bg-fintech-surface/50 p-3 rounded-r-xl">
                   <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium text-sm dark:text-white">{rec.title}</span>
+                    <span className="font-medium text-sm text-gray-900 dark:text-white">{rec.title}</span>
                     <Tag color={getPriorityColor(rec.priority)} className="m-0 text-[10px]">{rec.priority}</Tag>
                   </div>
-                  <Text className="text-fintech-textMuted text-xs block">{rec.description}</Text>
+                  <Text className="text-gray-500 dark:text-fintech-textMuted text-xs block">{rec.description}</Text>
                 </div>
               ))}
             </div>

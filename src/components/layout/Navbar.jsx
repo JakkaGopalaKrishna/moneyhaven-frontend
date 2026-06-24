@@ -120,7 +120,7 @@ const Navbar = ({ onMenuClick }) => {
                                 {item.severity === 'warning' && <WarningOutlined className="text-fintech-warning" />}
                                 {item.severity === 'success' && <CheckCircleOutlined className="text-fintech-success" />}
                                 {(!item.severity || item.severity === 'info') && <InfoCircleOutlined className="text-fintech-primary" />}
-                                <span className={`text-sm ${!item.isRead ? 'font-semibold dark:text-white' : 'dark:text-gray-300'}`}>
+                                <span className={`text-sm ${!item.isRead ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>
                                   {item.title}
                                 </span>
                               </div>

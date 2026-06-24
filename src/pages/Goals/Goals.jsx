@@ -339,8 +339,8 @@ const Goals = () => {
               <div key={goal._id} className="snap-center min-w-[280px] w-[280px] bg-white dark:bg-fintech-surface border border-gray-100 dark:border-fintech-border rounded-2xl p-4 shadow-sm flex flex-col justify-between cursor-pointer active:scale-95 transition-transform" onClick={() => handleViewGoal(goal)}>
                 <div className="flex justify-between items-start mb-3">
                   <div className="truncate pr-2">
-                    <div className="text-sm font-semibold truncate dark:text-white" title={goal.title}>{goal.title}</div>
-                    <div className="text-xs text-fintech-textMuted">{goal.category}</div>
+                    <div className="text-sm font-semibold truncate text-gray-900 dark:text-white" title={goal.title}>{goal.title}</div>
+                    <div className="text-xs text-gray-500 dark:text-fintech-textMuted">{goal.category}</div>
                   </div>
                 </div>
 
@@ -354,7 +354,7 @@ const Goals = () => {
                   />
                   <div className="flex-1">
                     <div className="flex justify-between text-[10px] mb-1">
-                      <span className="text-fintech-textMuted">Saved</span>
+                      <span className="text-gray-500 dark:text-fintech-textMuted">Saved</span>
                       <span className="font-semibold text-fintech-success">{formatCurrency(goal.savedAmount)}</span>
                     </div>
                     <div className="flex justify-between text-[10px]">

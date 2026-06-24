@@ -97,8 +97,8 @@ const Profile = () => {
         <div className="flex items-center gap-6">
           <Progress type="circle" percent={completion} size={80} strokeColor={{ '0%': '#3b82f6', '100%': '#22c55e' }} />
           <div>
-            <h3 className="text-lg font-medium dark:text-white">Profile {completion}% Completed</h3>
-            <p className="text-fintech-textMuted text-sm">Complete your profile to unlock all features.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Profile {completion}% Completed</h3>
+            <p className="text-gray-500 dark:text-fintech-textMuted text-sm">Complete your profile to unlock all features.</p>
           </div>
         </div>
       </SectionCard>
@@ -123,19 +123,19 @@ const Profile = () => {
       <SectionCard title="Account Activity">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p className="text-fintech-textMuted text-sm">Member Since</p>
-            <p className="font-medium dark:text-white">{new Date(user?.createdAt).toLocaleDateString()}</p>
+            <p className="text-gray-500 dark:text-fintech-textMuted text-sm">Member Since</p>
+            <p className="font-medium text-gray-900 dark:text-white">{new Date(user?.createdAt).toLocaleDateString()}</p>
           </div>
           <div>
-            <p className="text-fintech-textMuted text-sm">Last Login</p>
-            <p className="font-medium dark:text-white">{user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'First time login'}</p>
+            <p className="text-gray-500 dark:text-fintech-textMuted text-sm">Last Login</p>
+            <p className="font-medium text-gray-900 dark:text-white">{user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'First time login'}</p>
           </div>
           <div>
-            <p className="text-fintech-textMuted text-sm">Email Status</p>
+            <p className="text-gray-500 dark:text-fintech-textMuted text-sm">Email Status</p>
             {user?.isVerified ? (
-              <Badge status="success" text={<span>Verified Email <SafetyCertificateFilled className="text-fintech-success ml-1" /></span>} className="dark:text-white" />
+              <Badge status="success" text={<span>Verified Email <SafetyCertificateFilled className="text-fintech-success ml-1" /></span>} className="text-gray-900 dark:text-white" />
             ) : (
-              <Badge status="warning" text="Unverified" className="dark:text-white" />
+              <Badge status="warning" text="Unverified" className="text-gray-900 dark:text-white" />
             )}
           </div>
         </div>
@@ -305,11 +305,11 @@ const Profile = () => {
                   size={120} 
                   src={avatarUrl} 
                   icon={!avatarUrl && <UserOutlined />} 
-                  className="bg-fintech-primary mb-4 border-4 border-fintech-bg shadow-sm"
+                  className="bg-fintech-primary mb-4 border-4 border-white dark:border-fintech-bg shadow-sm"
                 />
               </Badge>
-              <h2 className="text-xl font-bold dark:text-white mt-4">{user?.firstName} {user?.lastName}</h2>
-              <p className="text-fintech-textMuted mb-6">{user?.email}</p>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mt-4">{user?.firstName} {user?.lastName}</h2>
+              <p className="text-gray-500 dark:text-fintech-textMuted mb-6">{user?.email}</p>
               
               <Upload 
                 name="avatar" 

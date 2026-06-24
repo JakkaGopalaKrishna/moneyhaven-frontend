@@ -11,9 +11,9 @@ const SectionCard = ({ title, extra, children, className = '', noPadding = false
       className={`h-full ${className}`}
     >
       <Card
-        title={title && <span className="text-fintech-text font-semibold text-lg">{title}</span>}
+        title={title && <span className="text-gray-900 dark:text-fintech-text font-semibold text-lg">{title}</span>}
         extra={extra}
-        className={`h-full shadow-soft hover:shadow-card transition-shadow duration-300 border border-fintech-border/50 dark:bg-fintech-surface/80 backdrop-blur-md ${noPadding ? 'body-no-padding' : ''}`}
+        className={`h-full shadow-soft hover:shadow-card transition-shadow duration-300 border border-gray-200 dark:border-fintech-border/50 bg-white/80 dark:bg-fintech-surface/80 backdrop-blur-md ${noPadding ? 'body-no-padding' : ''}`}
         bordered={false}
         {...props}
       >

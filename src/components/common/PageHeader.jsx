@@ -13,11 +13,11 @@ const PageHeader = ({ title, subtitle, actions }) => {
       className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6"
     >
       <div>
-        <Title level={2} className="!mb-1 !text-fintech-text !text-page">
+        <Title level={2} className="!mb-1 !text-gray-900 dark:!text-fintech-text !text-page">
           {title}
         </Title>
         {subtitle && (
-          <Text className="text-fintech-textMuted text-body">
+          <Text className="text-gray-500 dark:text-fintech-textMuted text-body">
             {subtitle}
           </Text>
         )}

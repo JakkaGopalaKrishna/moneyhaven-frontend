@@ -318,7 +318,7 @@ const Budgets = () => {
         {/* Desktop Table Section */}
         <div className="hidden md:block overflow-hidden">
           <div className="p-4 border-b border-gray-100 dark:border-fintech-border flex justify-between items-center bg-gray-50 dark:bg-fintech-bg/50 rounded-t-lg">
-            <Text strong className="dark:text-fintech-text">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days remaining)</Text>
+            <Text strong className="text-gray-900 dark:text-fintech-text">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days remaining)</Text>
           </div>
           <Table
             columns={columns}
@@ -330,7 +330,7 @@ const Budgets = () => {
             locale={{
               emptyText: (
                 <div className="py-8">
-                  <p className="text-fintech-textMuted mb-4">No budgets found for this period.</p>
+                  <p className="text-gray-500 dark:text-fintech-textMuted mb-4">No budgets found for this period.</p>
                   <Button type="primary" onClick={handleAdd}>Create your first budget</Button>
                 </div>
               )
@@ -341,7 +341,7 @@ const Budgets = () => {
         {/* Mobile Cards Section */}
         <div className="block md:hidden">
           <div className="p-3 border-b border-gray-100 dark:border-fintech-border flex justify-between items-center bg-gray-50 dark:bg-fintech-bg/50 rounded-t-lg mb-3">
-            <Text className="dark:text-fintech-text text-xs font-medium">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days left)</Text>
+            <Text className="text-gray-900 dark:text-fintech-text text-xs font-medium">Period: {progressData?.periodStatus} ({progressData?.daysRemaining} days left)</Text>
           </div>
           <List
             dataSource={filteredBudgets}
@@ -350,7 +350,7 @@ const Budgets = () => {
             pagination={{ pageSize: 10, size: "small", className: "text-center mt-4", hideOnSinglePage: true }}
             locale={{ emptyText: <EmptyState title="No Budgets" description="Create your first budget." action={<Button type="primary" size="small" onClick={handleAdd}>Create</Button>} /> }}
             renderItem={item => (
-              <div className="bg-fintech-bg/30 border border-fintech-border/50 p-4 rounded-xl mb-3 shadow-sm">
+              <div className="bg-white dark:bg-fintech-bg/30 border border-gray-100 dark:border-fintech-border/50 p-4 rounded-xl mb-3 shadow-sm">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <Tag color={item.category?.color || 'default'} className="m-0 border-0 rounded-md text-[10px]">
@@ -361,8 +361,8 @@ const Budgets = () => {
                     </Tag>
                   </div>
                   <div className="flex gap-1">
-                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EyeOutlined />} onClick={() => handleView(item)} />
-                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EditOutlined />} onClick={() => handleEdit(item)} />
+                    <Button type="text" size="small" className="text-gray-400 dark:text-fintech-textMuted" icon={<EyeOutlined />} onClick={() => handleView(item)} />
+                    <Button type="text" size="small" className="text-gray-400 dark:text-fintech-textMuted" icon={<EditOutlined />} onClick={() => handleEdit(item)} />
                   </div>
                 </div>
                 

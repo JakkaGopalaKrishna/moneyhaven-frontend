@@ -320,28 +320,28 @@ const Transactions = () => {
             }}
             locale={{ emptyText: <EmptyState title="No Transactions" description="Start tracking your spending." /> }}
             renderItem={item => (
-              <div className="bg-fintech-bg/30 border border-fintech-border/50 p-4 rounded-xl mb-3 shadow-sm relative">
+              <div className="bg-white dark:bg-fintech-bg/30 border border-gray-100 dark:border-fintech-border/50 p-4 rounded-xl mb-3 shadow-sm relative">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-fintech-surface/80 flex items-center justify-center text-lg">
+                    <div className="w-10 h-10 rounded-full bg-gray-50 dark:bg-fintech-surface/80 flex items-center justify-center text-lg">
                       {item.type === 'income' ? '💰' : '🛒'}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-fintech-text text-sm m-0">{item.title}</h4>
-                      <div className="text-xs text-fintech-textMuted mt-0.5">{dayjs(item.transactionDate).format('MMM D, YYYY')}</div>
+                      <h4 className="font-semibold text-gray-900 dark:text-fintech-text text-sm m-0">{item.title}</h4>
+                      <div className="text-xs text-gray-500 dark:text-fintech-textMuted mt-0.5">{dayjs(item.transactionDate).format('MMM D, YYYY')}</div>
                     </div>
                   </div>
                   <div className={`font-bold text-right text-sm ${item.type === 'income' ? 'text-fintech-success' : 'text-fintech-danger'}`}>
                     {item.type === 'income' ? '+' : '-'}{formatCurrency(item.amount)}
                   </div>
                 </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-fintech-border/50">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-fintech-border/50">
                   <Tag color={item.categoryId?.color || 'default'} className="m-0 border-0 rounded-md text-[10px]">
                     {item.categoryId?.name || item.categoryNameSnapshot}
                   </Tag>
                   <div className="flex gap-2">
-                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EyeOutlined />} onClick={() => handleView(item)} />
-                    <Button type="text" size="small" className="text-fintech-textMuted" icon={<EditOutlined />} onClick={() => handleEdit(item)} />
+                    <Button type="text" size="small" className="text-gray-400 dark:text-fintech-textMuted" icon={<EyeOutlined />} onClick={() => handleView(item)} />
+                    <Button type="text" size="small" className="text-gray-400 dark:text-fintech-textMuted" icon={<EditOutlined />} onClick={() => handleEdit(item)} />
                     <Button type="text" size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(item._id)} />
                   </div>
                 </div>

@@ -79,10 +79,10 @@ const Dashboard = () => {
           title="Financial Insights" 
           extra={<Button type="link" onClick={() => navigate('/analytics')}>Full Analytics</Button>}
         >
-          <div className="py-6 md:py-10 flex flex-col items-center justify-center bg-fintech-surface/50 rounded-xl border border-fintech-border/30">
+          <div className="py-6 md:py-10 flex flex-col items-center justify-center bg-gray-50 dark:bg-fintech-surface/50 rounded-xl border border-gray-200 dark:border-fintech-border/30">
             <div className="text-center px-4">
               <div className="text-3xl md:text-4xl mb-3">📈</div>
-              <p className="text-fintech-textMuted text-sm max-w-md mx-auto">Analytics charts have been moved to the dedicated module for better performance and deeper insights.</p>
+              <p className="text-gray-500 dark:text-fintech-textMuted text-sm max-w-md mx-auto">Analytics charts have been moved to the dedicated module for better performance and deeper insights.</p>
               <Button type="primary" className="mt-4" onClick={() => navigate('/analytics')}>Explore Full Analytics</Button>
             </div>
           </div>
@@ -101,11 +101,11 @@ const Dashboard = () => {
                 <List
                   dataSource={stats.recentTransactions}
                   renderItem={item => (
-                    <List.Item className="border-b border-fintech-border/30 py-3 last:border-0 hover:bg-fintech-bg/50 px-2 rounded-lg transition-colors cursor-pointer">
+                    <List.Item className="border-b border-gray-100 dark:border-fintech-border/30 py-3 last:border-0 hover:bg-gray-50 dark:hover:bg-fintech-bg/50 px-2 rounded-lg transition-colors cursor-pointer">
                       <List.Item.Meta
-                        avatar={<div className="w-10 h-10 rounded-full bg-fintech-bg flex items-center justify-center text-lg">{item.type === 'income' ? '💰' : '🛒'}</div>}
-                        title={<span className="text-fintech-text font-medium text-sm">{item.title}</span>}
-                        description={<span className="text-fintech-textMuted text-xs">{dayjs(item.transactionDate).format('MMM D, YYYY')}</span>}
+                        avatar={<div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-fintech-bg flex items-center justify-center text-lg">{item.type === 'income' ? '💰' : '🛒'}</div>}
+                        title={<span className="text-gray-900 dark:text-fintech-text font-medium text-sm">{item.title}</span>}
+                        description={<span className="text-gray-500 dark:text-fintech-textMuted text-xs">{dayjs(item.transactionDate).format('MMM D, YYYY')}</span>}
                       />
                       <div className={`font-medium text-sm ${item.type === 'income' ? 'text-fintech-success' : 'text-fintech-danger'}`}>
                         {item.type === 'income' ? '+' : '-'}{formatCurrency(item.amount)}
@@ -135,10 +135,10 @@ const Dashboard = () => {
                     {summary?.savingsGoalsSummary?.topGoals?.length > 0 ? (
                       <div className="space-y-3">
                         {summary.savingsGoalsSummary.topGoals.map((g, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                          <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-fintech-bg/50 rounded-xl border border-gray-100 dark:border-fintech-border/30">
                             <div>
-                              <div className="text-fintech-text font-medium text-sm">{g.title}</div>
-                              <div className="text-fintech-textMuted text-xs">Target: {dayjs(g.targetDate).format('MMM YYYY')}</div>
+                              <div className="text-gray-900 dark:text-fintech-text font-medium text-sm">{g.title}</div>
+                              <div className="text-gray-500 dark:text-fintech-textMuted text-xs">Target: {dayjs(g.targetDate).format('MMM YYYY')}</div>
                             </div>
                             <Progress type="circle" percent={g.progressPercentage} width={40} strokeColor="#22c55e" />
                           </div>
@@ -169,8 +169,8 @@ const Dashboard = () => {
                     {summary?.budgetSummary?.totalBudgetAmount > 0 ? (
                       <div className="space-y-3 pt-2">
                         <div className="flex justify-between items-end mb-1">
-                          <span className="text-fintech-textMuted text-xs">Overall Usage</span>
-                          <span className="font-bold text-fintech-text text-sm">{summary.budgetSummary.overallBudgetUsagePercentage}%</span>
+                          <span className="text-gray-500 dark:text-fintech-textMuted text-xs">Overall Usage</span>
+                          <span className="font-bold text-gray-900 dark:text-fintech-text text-sm">{summary.budgetSummary.overallBudgetUsagePercentage}%</span>
                         </div>
                         <Progress 
                           percent={summary.budgetSummary.overallBudgetUsagePercentage} 
@@ -178,8 +178,8 @@ const Dashboard = () => {
                           showInfo={false} 
                         />
                         <div className="flex justify-between text-[10px] md:text-xs mt-1">
-                          <span className="text-fintech-textMuted">Spent: {formatCurrency(summary.budgetSummary.totalBudgetSpending)}</span>
-                          <span className="text-fintech-textMuted">Remaining: {formatCurrency(summary.budgetSummary.overallRemainingBudget)}</span>
+                          <span className="text-gray-500 dark:text-fintech-textMuted">Spent: {formatCurrency(summary.budgetSummary.totalBudgetSpending)}</span>
+                          <span className="text-gray-500 dark:text-fintech-textMuted">Remaining: {formatCurrency(summary.budgetSummary.overallRemainingBudget)}</span>
                         </div>
                       </div>
                     ) : (
@@ -208,16 +208,16 @@ const Dashboard = () => {
                       <List
                         dataSource={notifications.slice(0, 3)}
                         renderItem={(item) => (
-                          <List.Item className="border-b border-fintech-border/30 py-2 last:border-0">
+                          <List.Item className="border-b border-gray-100 dark:border-fintech-border/30 py-2 last:border-0">
                             <List.Item.Meta
-                              title={<span className="text-xs md:text-sm font-medium text-fintech-text truncate block">{item.title}</span>}
-                              description={<span className="text-[10px] md:text-xs text-fintech-textMuted line-clamp-2">{item.message}</span>}
+                              title={<span className="text-xs md:text-sm font-medium text-gray-900 dark:text-fintech-text truncate block">{item.title}</span>}
+                              description={<span className="text-[10px] md:text-xs text-gray-500 dark:text-fintech-textMuted line-clamp-2">{item.message}</span>}
                             />
                           </List.Item>
                         )}
                       />
                     ) : (
-                      <div className="text-center text-fintech-textMuted text-sm py-4">No recent alerts</div>
+                      <div className="text-center text-gray-500 dark:text-fintech-textMuted text-sm py-4">No recent alerts</div>
                     )}
                   </motion.div>
                 )}
