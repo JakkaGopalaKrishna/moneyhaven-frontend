@@ -240,6 +240,9 @@ const Dashboard = () => {
               }}
             />
             <p className="mt-4 text-gray-500 dark:text-gray-400">Your financial health is looking great!</p>
+            <Button type="link" onClick={() => navigate('/analytics')} className="mt-2">
+              View Full Analysis
+            </Button>
           </Card>
 
           <Card title={TITLES.ACTIONS} className="shadow-sm">
