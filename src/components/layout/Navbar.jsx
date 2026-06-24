@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import useTheme from '../../hooks/useTheme';
 import { logoutUser } from '../../store/authSlice';
+import { formatCurrency } from '../../utils/currencyFormatter';
 
 const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Navbar = ({ onMenuClick }) => {
   const { isDarkMode, toggleTheme } = useTheme();
   
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { summary } = useSelector((state) => state.dashboard);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -65,17 +67,25 @@ const Navbar = ({ onMenuClick }) => {
         />
         
         {isAuthenticated ? (
-          <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
-            <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
-              <Avatar src={user?.avatar} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
-              <span className="hidden sm:flex items-center text-sm font-medium text-gray-700 dark:text-gray-200">
-                {user?.firstName} {user?.lastName}
-                {user?.isVerified && (
-                  <span className="ml-1 text-green-500 text-xs" title="Verified Email">✅</span>
-                )}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex flex-col text-right">
+              <span className="text-xs text-gray-500 dark:text-gray-400">Current Balance</span>
+              <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                {formatCurrency(summary?.currentBalance || user?.openingBalance)}
               </span>
             </div>
-          </Dropdown>
+            <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
+                <Avatar src={user?.avatar} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
+                <span className="hidden sm:flex items-center text-sm font-medium text-gray-700 dark:text-gray-200">
+                  {user?.firstName} {user?.lastName}
+                  {user?.isVerified && (
+                    <span className="ml-1 text-green-500 text-xs" title="Verified Email">✅</span>
+                  )}
+                </span>
+              </div>
+            </Dropdown>
+          </div>
         ) : (
           <div className="flex items-center gap-2">
             <Link to={ROUTES.LOGIN}>
