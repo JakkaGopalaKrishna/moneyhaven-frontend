@@ -11,6 +11,7 @@ import Profile from '../pages/Profile';
 import Transactions from '../pages/Transactions';
 import Categories from '../pages/Categories';
 import Budgets from '../pages/Budgets';
+import Goals from '../pages/Goals';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import NotFound from '../pages/NotFound/NotFound';
@@ -37,6 +38,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.TRANSACTIONS} element={<Transactions />} />
             <Route path={ROUTES.CATEGORIES} element={<Categories />} />
             <Route path={ROUTES.BUDGETS} element={<Budgets />} />
+            <Route path={ROUTES.GOALS} element={<Goals />} />
           </Route>
         </Route>
 

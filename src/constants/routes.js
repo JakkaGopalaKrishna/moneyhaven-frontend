@@ -6,6 +6,7 @@ export const ROUTES = {
   TRANSACTIONS: '/transactions',
   CATEGORIES: '/categories',
   BUDGETS: '/budgets',
+  GOALS: '/goals',
   PROFILE: '/profile',
   NOT_FOUND: '*',
 };

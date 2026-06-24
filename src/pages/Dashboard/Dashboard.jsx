@@ -279,6 +279,35 @@ const Dashboard = () => {
             </div>
           </Card>
 
+          <Card title="Savings Goals" className="shadow-sm" extra={<a onClick={() => navigate('/goals')}>View All</a>}>
+            {summary?.savingsGoalsSummary ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <span className="text-gray-500 dark:text-gray-400">Overall Progress</span>
+                  <span className="font-bold text-lg dark:text-white">{summary.savingsGoalsSummary.overallProgress}%</span>
+                </div>
+                <Progress percent={summary.savingsGoalsSummary.overallProgress} strokeColor="#722ed1" showInfo={false} />
+                
+                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 space-y-3">
+                  {summary.savingsGoalsSummary.topGoals.map((g, idx) => (
+                    <div key={idx} className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <span className="font-medium dark:text-white truncate max-w-[120px]" title={g.title}>{g.title}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{dayjs(g.targetDate).format('MMM D')}</span>
+                      </div>
+                      <Progress type="circle" percent={g.progressPercentage} width={40} />
+                    </div>
+                  ))}
+                  {summary.savingsGoalsSummary.topGoals.length === 0 && (
+                    <div className="text-center text-gray-500 dark:text-gray-400 py-2">No active goals found.</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <Empty description={EMPTY_STATES.CHARTS} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            )}
+          </Card>
+
           <Card title={TITLES.ACCOUNT} className="shadow-sm">
             <div className="space-y-4">
               <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
