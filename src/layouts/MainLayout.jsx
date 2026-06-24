@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/layout/Footer';
-
-// Placeholders for components that will be built in subsequent commits
-const SidebarPlaceholder = () => (
-  <div className="hidden md:flex w-64 flex-col bg-white dark:bg-[#1f1f1f] border-r border-gray-200 dark:border-gray-800 transition-colors duration-200 h-full fixed left-0 top-0 z-20" />
-);
+import Sidebar from '../components/layout/Sidebar';
 
 const NavbarPlaceholder = ({ onMenuClick }) => (
   <header className="h-16 bg-white dark:bg-[#1f1f1f] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sticky top-0 z-10 transition-colors duration-200">
@@ -23,7 +19,7 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#141414] transition-colors duration-200">
-      <SidebarPlaceholder />
+      <Sidebar />
       
       <div className="md:ml-64 flex flex-col min-h-screen">
         <NavbarPlaceholder onMenuClick={() => setDrawerOpen(true)} />
