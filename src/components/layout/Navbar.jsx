@@ -68,7 +68,7 @@ const Navbar = ({ onMenuClick }) => {
   ];
 
   return (
-    <header className="h-16 bg-white/90 dark:bg-fintech-surface/90 backdrop-blur-md border-b border-gray-200 dark:border-fintech-border flex items-center justify-between px-4 sticky top-0 z-40 transition-colors duration-200">
+    <header className="h-16 bg-white/90 dark:bg-fintech-surface/90 backdrop-blur-md border-b border-gray-200 dark:border-fintech-border flex items-center justify-between px-4 fixed top-0 left-0 w-full z-50 transition-colors duration-200">
       <div className="flex items-center gap-4">
         <button
           className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -82,14 +82,6 @@ const Navbar = ({ onMenuClick }) => {
           MoneyHaven
         </div>
         <div className="md:hidden font-bold text-xl text-fintech-primary">MoneyHaven</div>
-        <div className="hidden md:flex items-center ml-4">
-          <Input 
-            prefix={<SearchOutlined className="text-gray-400" />} 
-            placeholder="Search transactions..." 
-            className="w-64 bg-gray-100 dark:bg-fintech-background border-transparent hover:border-fintech-border focus:border-fintech-primary dark:text-white rounded-full"
-            variant="filled"
-          />
-        </div>
       </div>
 
       <div className="flex items-center gap-4">

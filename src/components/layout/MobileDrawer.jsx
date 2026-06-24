@@ -1,11 +1,29 @@
 import { Drawer } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
+import { 
+  AppstoreOutlined, 
+  SwapOutlined, 
+  WalletOutlined, 
+  FlagOutlined, 
+  LineChartOutlined, 
+  FileTextOutlined, 
+  BellOutlined, 
+  UserOutlined, 
+  SettingOutlined 
+} from '@ant-design/icons';
 
 const MobileDrawer = ({ open, onClose }) => {
   const navItems = [
-    { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: '📊' },
-    { label: 'Profile', path: ROUTES.PROFILE, icon: '👤' },
+    { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: <AppstoreOutlined /> },
+    { label: 'Transactions', path: ROUTES.TRANSACTIONS, icon: <SwapOutlined /> },
+    { label: 'Budgets', path: ROUTES.BUDGETS, icon: <WalletOutlined /> },
+    { label: 'Goals', path: ROUTES.GOALS, icon: <FlagOutlined /> },
+    { label: 'Analytics', path: ROUTES.ANALYTICS, icon: <LineChartOutlined /> },
+    { label: 'Reports', path: ROUTES.REPORTS, icon: <FileTextOutlined /> },
+    { label: 'Notifications', path: ROUTES.NOTIFICATIONS, icon: <BellOutlined /> },
+    { label: 'Profile', path: ROUTES.PROFILE, icon: <UserOutlined /> },
+    { label: 'Settings', path: ROUTES.NOTIFICATION_SETTINGS, icon: <SettingOutlined /> },
   ];
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency } from '../../../utils/currencyFormatter';
+import { formatCurrency } from '../../utils/currencyFormatter';
 import { motion } from 'framer-motion';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { Progress } from 'antd';

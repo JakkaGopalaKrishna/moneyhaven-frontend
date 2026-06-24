@@ -145,9 +145,9 @@ const Analytics = () => {
         {/* Charts Panel */}
         <Col xs={24} lg={16} className="space-y-6">
           <SectionCard title="Income vs Expense Trend">
-            <div className="h-[250px] md:h-[300px] lg:h-[400px]">
+            <div className="h-[320px] md:h-[350px] lg:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={monthlyTrendData}>
+                <AreaChart data={monthlyTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
@@ -158,10 +158,10 @@ const Analytics = () => {
                       <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
+                  <XAxis dataKey="name" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+                  <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} width={60} />
                   <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
                   <Area type="monotone" dataKey="Income" stroke="#22c55e" fillOpacity={1} fill="url(#colorIncome)" />
                   <Area type="monotone" dataKey="Expense" stroke="#ef4444" fillOpacity={1} fill="url(#colorExpense)" />
                 </AreaChart>
@@ -172,15 +172,15 @@ const Analytics = () => {
           <Row gutter={[24, 24]}>
             <Col xs={24} md={12}>
               <SectionCard title="Expense Breakdown">
-                <div className="h-[250px] md:h-[300px]">
+                <div className="h-[300px] md:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
+                    <PieChart margin={{ top: 0, right: 0, bottom: 20, left: 0 }}>
                       <Pie
                         data={pieData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
+                        innerRadius={50}
+                        outerRadius={75}
                         paddingAngle={5}
                         dataKey="value"
                       >
@@ -189,7 +189,7 @@ const Analytics = () => {
                         ))}
                       </Pie>
                       <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: '12px' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -197,12 +197,12 @@ const Analytics = () => {
             </Col>
             <Col xs={24} md={12}>
               <SectionCard title="Budget Utilization">
-                <div className="h-[250px] md:h-[300px]">
+                <div className="h-[300px] md:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={budgets?.budgetUtilization || []} layout="vertical">
+                    <BarChart data={budgets?.budgetUtilization || []} layout="vertical" margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                       <XAxis type="number" hide />
-                      <YAxis dataKey="category" type="category" width={80} stroke="#9ca3af" />
+                      <YAxis dataKey="category" type="category" width={100} stroke="#9ca3af" tick={{ fontSize: 11 }} />
                       <RechartsTooltip formatter={(val) => `${val}%`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
                       <Bar dataKey="utilizationPercentage" fill="#3b82f6" radius={[0, 4, 4, 0]}>
                         {(budgets?.budgetUtilization || []).map((entry, index) => (

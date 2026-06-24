@@ -38,9 +38,13 @@ const TransactionDetailsDrawer = ({ visible, transaction, onClose }) => {
           </Tag>
         </Descriptions.Item>
         <Descriptions.Item label="Category">
-          <Tag color={CATEGORY_COLORS[transaction.category] || 'default'}>
-            {transaction.category}
-          </Tag>
+          {transaction.categoryId ? (
+            <Tag color={transaction.categoryId.color || 'default'}>
+              {transaction.categoryId.name}
+            </Tag>
+          ) : (
+            <Tag>{transaction.categoryNameSnapshot}</Tag>
+          )}
         </Descriptions.Item>
         <Descriptions.Item label="Payment Method">
           {transaction.paymentMethod}

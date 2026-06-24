@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency } from '../../../utils/currencyFormatter';
+import { formatCurrency } from '../../utils/currencyFormatter';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';

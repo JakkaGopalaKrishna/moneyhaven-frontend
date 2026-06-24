@@ -33,7 +33,6 @@ const Sidebar = () => {
   const navItems = [
     { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: <AppstoreOutlined /> },
     { label: 'Transactions', path: ROUTES.TRANSACTIONS, icon: <SwapOutlined /> },
-    { label: 'Categories', path: ROUTES.CATEGORIES, icon: <TagsOutlined /> },
     { label: 'Budgets', path: ROUTES.BUDGETS, icon: <WalletOutlined /> },
     { label: 'Goals', path: ROUTES.GOALS, icon: <FlagOutlined /> },
     { label: 'Analytics', path: ROUTES.ANALYTICS, icon: <LineChartOutlined /> },
@@ -44,10 +43,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden md:flex flex-col w-64 bg-white/90 dark:bg-fintech-surface/90 backdrop-blur-xl border-r border-gray-200 dark:border-fintech-border transition-colors duration-200 h-full fixed left-0 top-0 z-50">
-      <div className="h-16 flex items-center px-8 border-b border-transparent transition-colors duration-200">
-        {/* Logo space is handled by Navbar on Desktop, but we can leave it empty or keep a brand mark */}
-      </div>
+    <aside className="hidden md:flex flex-col w-64 bg-white/90 dark:bg-fintech-surface/90 backdrop-blur-xl border-r border-gray-200 dark:border-fintech-border transition-colors duration-200 h-[calc(100vh-4rem)] fixed left-0 top-16 z-40">
       
       <nav className="flex-1 overflow-y-auto py-8 px-4 space-y-1 scrollbar-hide">
         {navItems.map((item) => (
