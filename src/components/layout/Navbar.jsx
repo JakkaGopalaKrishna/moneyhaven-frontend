@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Avatar, Dropdown, Button, Badge, List, Typography } from 'antd';
-import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined, LoginOutlined, UserAddOutlined, BellOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Button, Badge, List, Typography, Input } from 'antd';
+import { UserOutlined, LogoutOutlined, SunOutlined, MoonOutlined, LoginOutlined, UserAddOutlined, BellOutlined, SearchOutlined, InfoCircleOutlined, WarningOutlined, ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
@@ -68,7 +68,7 @@ const Navbar = ({ onMenuClick }) => {
   ];
 
   return (
-    <header className="h-16 bg-white dark:bg-[#1f1f1f] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sticky top-0 z-10 transition-colors duration-200">
+    <header className="h-16 bg-white/90 dark:bg-fintech-surface/90 backdrop-blur-md border-b border-gray-200 dark:border-fintech-border flex items-center justify-between px-4 sticky top-0 z-40 transition-colors duration-200">
       <div className="flex items-center gap-4">
         <button
           className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -78,7 +78,18 @@ const Navbar = ({ onMenuClick }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         </button>
-        <div className="md:hidden font-bold text-xl text-[#1677ff] dark:text-blue-400">MoneyHaven</div>
+        <div className="hidden md:block font-bold text-2xl text-fintech-primary cursor-pointer" onClick={() => navigate(ROUTES.DASHBOARD)}>
+          MoneyHaven
+        </div>
+        <div className="md:hidden font-bold text-xl text-fintech-primary">MoneyHaven</div>
+        <div className="hidden md:flex items-center ml-4">
+          <Input 
+            prefix={<SearchOutlined className="text-gray-400" />} 
+            placeholder="Search transactions..." 
+            className="w-64 bg-gray-100 dark:bg-fintech-background border-transparent hover:border-fintech-border focus:border-fintech-primary dark:text-white rounded-full"
+            variant="filled"
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
@@ -111,10 +122,16 @@ const Navbar = ({ onMenuClick }) => {
                       >
                         <List.Item.Meta
                           title={
-                            <div className="flex justify-between items-center w-full">
-                              <span className={`text-sm ${!item.isRead ? 'font-semibold dark:text-white' : 'dark:text-gray-300'}`}>
-                                {item.title}
-                              </span>
+                            <div className="flex justify-between items-center w-full gap-2">
+                              <div className="flex items-center gap-2">
+                                {item.severity === 'critical' && <ExclamationCircleOutlined className="text-fintech-danger" />}
+                                {item.severity === 'warning' && <WarningOutlined className="text-fintech-warning" />}
+                                {item.severity === 'success' && <CheckCircleOutlined className="text-fintech-success" />}
+                                {(!item.severity || item.severity === 'info') && <InfoCircleOutlined className="text-fintech-primary" />}
+                                <span className={`text-sm ${!item.isRead ? 'font-semibold dark:text-white' : 'dark:text-gray-300'}`}>
+                                  {item.title}
+                                </span>
+                              </div>
                             </div>
                           }
                           description={
