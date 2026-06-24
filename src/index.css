@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply bg-white text-gray-900 dark:bg-[#141414] dark:text-white antialiased transition-colors duration-200 m-0 p-0;
+    @apply bg-white text-gray-900 dark:bg-fintech-bg dark:text-fintech-text antialiased transition-colors duration-200 m-0 p-0;
   }
 }

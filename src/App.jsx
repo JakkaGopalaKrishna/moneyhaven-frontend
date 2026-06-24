@@ -5,6 +5,7 @@ import AppRoutes from './routes/AppRoutes';
 import useTheme from './hooks/useTheme';
 import LoadingPage from './pages/Loading/LoadingPage';
 import { getCurrentUser } from './store/authSlice';
+import { THEME } from './constants/theme';
 
 function App() {
   const { isDarkMode } = useTheme();
@@ -34,9 +35,21 @@ function App() {
       theme={{
         algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
-          colorPrimary: '#1677ff',
-          colorBgBase: isDarkMode ? '#141414' : '#ffffff',
+          colorPrimary: THEME.colors.primary,
+          colorSuccess: THEME.colors.success,
+          colorWarning: THEME.colors.warning,
+          colorError: THEME.colors.danger,
+          colorBgBase: isDarkMode ? THEME.colors.dark.background : THEME.colors.light.background,
+          colorTextBase: isDarkMode ? THEME.colors.dark.textPrimary : THEME.colors.light.textPrimary,
+          borderRadius: 8,
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
         },
+        components: {
+          Card: {
+            colorBgContainer: isDarkMode ? THEME.colors.dark.surface : THEME.colors.light.surface,
+            colorBorderSecondary: isDarkMode ? THEME.colors.dark.border : THEME.colors.light.border,
+          }
+        }
       }}
     >
       <AppRoutes />
