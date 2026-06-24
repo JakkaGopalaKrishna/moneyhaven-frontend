@@ -8,6 +8,7 @@ export const ROUTES = {
   BUDGETS: '/budgets',
   GOALS: '/goals',
   ANALYTICS: '/analytics',
+  REPORTS: '/reports',
   PROFILE: '/profile',
   NOT_FOUND: '*',
 };
