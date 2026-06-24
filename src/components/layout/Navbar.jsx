@@ -1,12 +1,22 @@
 import { Avatar, Dropdown, Button } from 'antd';
-import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import useTheme from '../../hooks/useTheme';
+import { logoutUser } from '../../store/authSlice';
 
 const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isDarkMode, toggleTheme } = useTheme();
+  
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate(ROUTES.LOGIN);
+  };
 
   const userMenu = [
     {
@@ -28,9 +38,7 @@ const Navbar = ({ onMenuClick }) => {
       icon: <LogoutOutlined />,
       label: 'Logout',
       danger: true,
-      onClick: () => {
-        // Handle logout later
-      },
+      onClick: handleLogout,
     },
   ];
 
@@ -56,12 +64,29 @@ const Navbar = ({ onMenuClick }) => {
           className="dark:text-white"
         />
         
-        <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
-          <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
-            <Avatar icon={<UserOutlined />} className="bg-blue-500" />
-            <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-200">User</span>
+        {isAuthenticated ? (
+          <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
+            <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
+              <Avatar src={user?.avatar} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
+              <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-200">
+                {user?.firstName} {user?.lastName}
+              </span>
+            </div>
+          </Dropdown>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Link to={ROUTES.LOGIN}>
+              <Button type="text" icon={<LoginOutlined />} className="dark:text-white hidden sm:flex">
+                Login
+              </Button>
+            </Link>
+            <Link to={ROUTES.REGISTER}>
+              <Button type="primary" icon={<UserAddOutlined />}>
+                Register
+              </Button>
+            </Link>
           </div>
-        </Dropdown>
+        )}
       </div>
     </header>
   );
