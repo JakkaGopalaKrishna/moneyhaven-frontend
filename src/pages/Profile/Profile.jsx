@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Tabs, Form, Input, Button, Upload, Progress, Statistic, Row, Col, message, Popconfirm, Avatar, Badge } from 'antd';
+import { Tabs, Form, Input, Button, Upload, Progress, Statistic, Row, Col, message, Popconfirm, Avatar, Badge } from 'antd';
 import { UserOutlined, UploadOutlined, DeleteOutlined, CheckCircleOutlined, SafetyCertificateFilled } from '@ant-design/icons';
 import { updateProfileUser, uploadAvatarUser, deleteAvatarUser, changePasswordUser } from '../../store/profileSlice';
 import { getDashboardSummaryUser } from '../../store/dashboardSlice';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -91,23 +93,23 @@ const Profile = () => {
 
   const overviewContent = (
     <div className="space-y-6">
-      <Card title="Profile Completion">
-        <div className="flex items-center gap-4">
-          <Progress type="circle" percent={completion} size={80} />
+      <SectionCard title="Profile Completion">
+        <div className="flex items-center gap-6">
+          <Progress type="circle" percent={completion} size={80} strokeColor={{ '0%': '#3b82f6', '100%': '#22c55e' }} />
           <div>
             <h3 className="text-lg font-medium dark:text-white">Profile {completion}% Completed</h3>
-            <p className="text-gray-500 dark:text-gray-400">Complete your profile to unlock all features.</p>
+            <p className="text-fintech-textMuted text-sm">Complete your profile to unlock all features.</p>
           </div>
         </div>
-      </Card>
+      </SectionCard>
 
-      <Card title="Account Statistics">
-        <Row gutter={[16, 16]}>
+      <SectionCard title="Account Statistics">
+        <Row gutter={[24, 24]}>
           <Col xs={12} sm={6}>
-            <Statistic title="Total Income" value={summary?.totalIncome || 0} prefix="₹" precision={2} valueStyle={{ color: '#3f8600' }} />
+            <Statistic title="Total Income" value={summary?.totalIncome || 0} prefix="₹" precision={2} valueStyle={{ color: '#22c55e' }} />
           </Col>
           <Col xs={12} sm={6}>
-            <Statistic title="Total Expenses" value={summary?.totalExpenses || 0} prefix="₹" precision={2} valueStyle={{ color: '#cf1322' }} />
+            <Statistic title="Total Expenses" value={summary?.totalExpenses || 0} prefix="₹" precision={2} valueStyle={{ color: '#ef4444' }} />
           </Col>
           <Col xs={12} sm={6}>
             <Statistic title="Current Balance" value={summary?.currentBalance !== undefined ? summary.currentBalance : (user?.openingBalance || 0)} prefix="₹" precision={2} />
@@ -116,36 +118,36 @@ const Profile = () => {
             <Statistic title="Total Transactions" value={summary?.totalTransactions || 0} />
           </Col>
         </Row>
-      </Card>
+      </SectionCard>
 
-      <Card title="Account Activity">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <SectionCard title="Account Activity">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p className="text-gray-500 dark:text-gray-400">Member Since</p>
+            <p className="text-fintech-textMuted text-sm">Member Since</p>
             <p className="font-medium dark:text-white">{new Date(user?.createdAt).toLocaleDateString()}</p>
           </div>
           <div>
-            <p className="text-gray-500 dark:text-gray-400">Last Login</p>
+            <p className="text-fintech-textMuted text-sm">Last Login</p>
             <p className="font-medium dark:text-white">{user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'First time login'}</p>
           </div>
           <div>
-            <p className="text-gray-500 dark:text-gray-400">Email Status</p>
+            <p className="text-fintech-textMuted text-sm">Email Status</p>
             {user?.isVerified ? (
-              <Badge status="success" text={<span>Verified Email <SafetyCertificateFilled className="text-green-500 ml-1" /></span>} className="dark:text-white" />
+              <Badge status="success" text={<span>Verified Email <SafetyCertificateFilled className="text-fintech-success ml-1" /></span>} className="dark:text-white" />
             ) : (
               <Badge status="warning" text="Unverified" className="dark:text-white" />
             )}
           </div>
         </div>
-      </Card>
+      </SectionCard>
     </div>
   );
 
   const editProfileContent = (
     <div className="space-y-6">
-      <Card title="Avatar Management">
+      <SectionCard title="Avatar Management">
         <div className="flex items-center gap-6">
-          <Avatar size={100} src={avatarUrl} icon={<UserOutlined />} className="bg-blue-500" />
+          <Avatar size={100} src={avatarUrl} icon={<UserOutlined />} className="bg-fintech-primary" />
           <div className="space-y-2">
             <Upload 
               customRequest={handleAvatarUpload}
@@ -169,15 +171,15 @@ const Profile = () => {
             )}
           </div>
         </div>
-      </Card>
+      </SectionCard>
 
-      <Card title="Profile Information">
+      <SectionCard title="Profile Information">
         <Form
           form={profileForm}
           layout="vertical"
           onFinish={handleProfileUpdate}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Form.Item
               name="firstName"
               label={<span className="dark:text-white">First Name</span>}
@@ -212,21 +214,21 @@ const Profile = () => {
                 },
               }),
             ]}
-            extra="Changing opening balance affects overall balance calculations."
+            extra={<span className="text-fintech-textMuted text-xs">Changing opening balance affects overall balance calculations.</span>}
           >
-            <Input type="number" step="0.01" prefix="$" />
+            <Input type="number" step="0.01" prefix="₹" />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading} className="px-8 rounded-full">
             Update Profile
           </Button>
         </Form>
-      </Card>
+      </SectionCard>
     </div>
   );
 
   const securityContent = (
-    <Card title="Change Password">
+    <SectionCard title="Change Password">
       <Form
         form={passwordForm}
         layout="vertical"
@@ -274,11 +276,11 @@ const Profile = () => {
           <Input.Password placeholder="Confirm new password" />
         </Form.Item>
 
-        <Button type="primary" htmlType="submit" loading={loading}>
+        <Button type="primary" htmlType="submit" loading={loading} className="px-8 rounded-full">
           Change Password
         </Button>
       </Form>
-    </Card>
+    </SectionCard>
   );
 
   const tabItems = [
@@ -288,9 +290,51 @@ const Profile = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto py-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Profile Management</h1>
-      <Tabs defaultActiveKey="1" items={tabItems} className="bg-white dark:bg-[#1f1f1f] p-6 rounded-lg shadow-sm" />
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader title="Profile Settings" subtitle="Manage your account details and preferences." />
+
+      <Row gutter={[24, 24]}>
+        <Col xs={24} md={8}>
+          <SectionCard className="text-center">
+            <div className="flex flex-col items-center p-4">
+              <Badge 
+                count={user?.isVerified ? <SafetyCertificateFilled className="text-fintech-success text-xl" /> : null}
+                offset={[-10, 10]}
+              >
+                <Avatar 
+                  size={120} 
+                  src={avatarUrl} 
+                  icon={!avatarUrl && <UserOutlined />} 
+                  className="bg-fintech-primary mb-4 border-4 border-fintech-bg shadow-sm"
+                />
+              </Badge>
+              <h2 className="text-xl font-bold dark:text-white mt-4">{user?.firstName} {user?.lastName}</h2>
+              <p className="text-fintech-textMuted mb-6">{user?.email}</p>
+              
+              <Upload 
+                name="avatar" 
+                showUploadList={false} 
+                customRequest={handleAvatarUpload}
+                accept="image/*"
+              >
+                <Button icon={<UploadOutlined />} className="w-full mb-2">Change Avatar</Button>
+              </Upload>
+              
+              {user?.avatar && (
+                <Popconfirm title="Delete avatar?" onConfirm={handleAvatarDelete}>
+                  <Button danger type="text" icon={<DeleteOutlined />} className="w-full">Remove Avatar</Button>
+                </Popconfirm>
+              )}
+            </div>
+          </SectionCard>
+        </Col>
+        
+        <Col xs={24} md={16}>
+          <SectionCard className="p-2">
+            <Tabs defaultActiveKey="1" items={tabItems} className="fintech-tabs" />
+          </SectionCard>
+        </Col>
+      </Row>
     </div>
   );
 };

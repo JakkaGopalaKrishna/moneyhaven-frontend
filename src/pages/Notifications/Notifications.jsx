@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications, markAsRead, markAllAsRead, archiveNotification } from '../../store/notificationSlice';
 import { 
-  Card, Typography, List, Button, Tag, Space, Tabs, Empty, 
+  Typography, List, Button, Tag, Space, Tabs, Empty, 
   Tooltip, Badge, Dropdown, Menu
 } from 'antd';
 import { 
@@ -13,10 +13,12 @@ import {
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useNavigate } from 'react-router-dom';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
 
 dayjs.extend(relativeTime);
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { TabPane } = Tabs;
 
 const Notifications = () => {
@@ -63,29 +65,29 @@ const Notifications = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-6 px-4 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <Title level={2} className="!mb-1 dark:text-white">Notification Center</Title>
-          <Text className="text-gray-500 dark:text-gray-400">Stay up to date with your financial activity.</Text>
-        </div>
-        <Space className="w-full sm:w-auto">
-          <Button 
-            icon={<CheckOutlined />} 
-            onClick={() => dispatch(markAllAsRead())}
-          >
-            Mark All Read
-          </Button>
-          <Button 
-            icon={<SettingOutlined />} 
-            onClick={() => navigate('/notifications/settings')}
-          >
-            Settings
-          </Button>
-        </Space>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader 
+        title="Notification Center" 
+        subtitle="Stay up to date with your financial activity."
+        actions={
+          <Space>
+            <Button 
+              icon={<CheckOutlined />} 
+              onClick={() => dispatch(markAllAsRead())}
+            >
+              Mark All Read
+            </Button>
+            <Button 
+              icon={<SettingOutlined />} 
+              onClick={() => navigate('/notifications/settings')}
+            >
+              Settings
+            </Button>
+          </Space>
+        }
+      />
 
-      <Card className="shadow-sm">
+      <SectionCard className="p-2">
         <Tabs activeKey={filter} onChange={setFilter}>
           <TabPane tab="All" key="all" />
           <TabPane tab="Unread" key="unread" />
@@ -140,7 +142,7 @@ const Notifications = () => {
             </List.Item>
           )}
         />
-      </Card>
+      </SectionCard>
     </div>
   );
 };
