@@ -8,6 +8,7 @@ import PublicRoute from './PublicRoute';
 import SkeletonLoader from '../components/common/SkeletonLoader';
 
 // Pages
+const LandingPage = lazy(() => import('../pages/Landing'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Profile = lazy(() => import('../pages/Profile'));
 const Transactions = lazy(() => import('../pages/Transactions'));
@@ -28,7 +29,7 @@ const AppRoutes = () => {
     <Router>
       <Suspense fallback={<div className="p-8 space-y-6"><SkeletonLoader type="stat" count={4} /><SkeletonLoader type="chart" /></div>}>
         <Routes>
-          <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
+          <Route path={ROUTES.HOME} element={<LandingPage />} />
           
           {/* Auth Routes */}
           <Route element={<PublicRoute />}>
