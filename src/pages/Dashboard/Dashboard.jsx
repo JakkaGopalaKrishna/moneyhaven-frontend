@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Statistic, Progress, Button, Empty, Skeleton, Badge, Space } from 'antd';
+import { Card, Row, Col, Statistic, Progress, Button, Empty, Skeleton, Badge, Space, List } from 'antd';
 import { 
   WalletOutlined, 
   ArrowUpOutlined, 
@@ -15,9 +15,11 @@ import {
 } from '@ant-design/icons';
 import CountUp from 'react-countup';
 import { useNavigate } from 'react-router-dom';
-import { getDashboardSummaryUser } from '../../store/dashboardSlice';
+import { getDashboardSummaryUser, getDashboardStatsUser } from '../../store/dashboardSlice';
 import { DASHBOARD_CONSTANTS } from '../../constants/dashboard';
+import { TRANSACTION_TYPES } from '../../constants/transactions';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import dayjs from 'dayjs';
 
 const { TITLES, LABELS, EMPTY_STATES } = DASHBOARD_CONSTANTS;
 
@@ -40,11 +42,12 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { summary, loading } = useSelector((state) => state.dashboard);
+  const { summary, stats, loading } = useSelector((state) => state.dashboard);
   const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
     dispatch(getDashboardSummaryUser());
+    dispatch(getDashboardStatsUser());
     
     // Set greeting based on time
     const hour = new Date().getHours();
@@ -55,6 +58,7 @@ const Dashboard = () => {
 
   const handleRefresh = () => {
     dispatch(getDashboardSummaryUser());
+    dispatch(getDashboardStatsUser());
   };
 
   // Skeleton placeholders
@@ -168,8 +172,28 @@ const Dashboard = () => {
 
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
-              <Card title={TITLES.ACTIVITY} className="h-full shadow-sm">
-                <Empty description={EMPTY_STATES.TRANSACTIONS} />
+              <Card title={TITLES.ACTIVITY} className="h-full shadow-sm" extra={<a onClick={() => navigate('/transactions')}>View All</a>}>
+                {stats?.recentTransactions && stats.recentTransactions.length > 0 ? (
+                  <List
+                    dataSource={stats.recentTransactions}
+                    renderItem={item => (
+                      <List.Item
+                        actions={[
+                          <span className={item.type === TRANSACTION_TYPES.INCOME ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
+                            {item.type === TRANSACTION_TYPES.INCOME ? '+' : '-'} {formatCurrency(item.amount)}
+                          </span>
+                        ]}
+                      >
+                        <List.Item.Meta
+                          title={<span className="dark:text-white">{item.title}</span>}
+                          description={dayjs(item.transactionDate).format('MMM D, YYYY')}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                ) : (
+                  <Empty description={EMPTY_STATES.TRANSACTIONS} />
+                )}
               </Card>
             </Col>
             <Col xs={24} md={12}>
