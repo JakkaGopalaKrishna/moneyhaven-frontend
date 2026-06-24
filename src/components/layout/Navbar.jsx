@@ -1,11 +1,19 @@
-import { Avatar, Dropdown, Button } from 'antd';
-import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { Avatar, Dropdown, Button, Badge, List, Typography } from 'antd';
+import { UserOutlined, SettingOutlined, LogoutOutlined, SunOutlined, MoonOutlined, LoginOutlined, UserAddOutlined, BellOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import useTheme from '../../hooks/useTheme';
 import { logoutUser } from '../../store/authSlice';
+import { fetchNotifications, fetchUnreadCount, markAsRead } from '../../store/notificationSlice';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
+const { Text } = Typography;
 
 const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
@@ -14,10 +22,30 @@ const Navbar = ({ onMenuClick }) => {
   
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { summary } = useSelector((state) => state.dashboard);
+  const { notifications, unreadCount } = useSelector((state) => state.notifications);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchUnreadCount());
+      dispatch(fetchNotifications());
+
+      const interval = setInterval(() => {
+        dispatch(fetchUnreadCount());
+        dispatch(fetchNotifications());
+      }, 30000); // 30 seconds polling
+
+      return () => clearInterval(interval);
+    }
+  }, [dispatch, isAuthenticated]);
 
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate(ROUTES.LOGIN);
+  };
+
+  const handleNotificationClick = (item) => {
+    if (!item.isRead) dispatch(markAsRead(item._id));
+    if (item.actionUrl) navigate(item.actionUrl);
   };
 
   const userMenu = [
@@ -68,7 +96,51 @@ const Navbar = ({ onMenuClick }) => {
         
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex flex-col text-right">
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <div className="bg-white dark:bg-[#1f1f1f] rounded-lg shadow-lg w-80 border border-gray-200 dark:border-gray-800">
+                  <div className="flex justify-between items-center p-3 border-b border-gray-100 dark:border-gray-800">
+                    <span className="font-semibold dark:text-white">Notifications</span>
+                    <Button type="link" size="small" onClick={() => navigate(ROUTES.NOTIFICATIONS)}>View All</Button>
+                  </div>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={notifications.slice(0, 5)}
+                    className="max-h-80 overflow-y-auto"
+                    locale={{ emptyText: <div className="p-4 text-center text-gray-500">No new notifications</div> }}
+                    renderItem={(item) => (
+                      <List.Item
+                        className={`px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 border-b border-gray-50 dark:border-gray-800 ${!item.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
+                        onClick={() => handleNotificationClick(item)}
+                      >
+                        <List.Item.Meta
+                          title={
+                            <div className="flex justify-between items-center w-full">
+                              <span className={`text-sm ${!item.isRead ? 'font-semibold dark:text-white' : 'dark:text-gray-300'}`}>
+                                {item.title}
+                              </span>
+                            </div>
+                          }
+                          description={
+                            <div className="flex flex-col mt-1">
+                              <Text className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{item.message}</Text>
+                              <Text className="text-[10px] text-gray-400 mt-1">{dayjs(item.createdAt).fromNow()}</Text>
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              )}
+            >
+              <Badge count={unreadCount} overflowCount={99} size="small" offset={[-2, 6]}>
+                <Button type="text" icon={<BellOutlined className="text-lg" />} className="dark:text-white" />
+              </Badge>
+            </Dropdown>
+
+            <div className="hidden md:flex flex-col text-right border-l border-gray-200 dark:border-gray-800 pl-4">
               <span className="text-xs text-gray-500 dark:text-gray-400">Current Balance</span>
               <span className="text-sm font-bold text-green-600 dark:text-green-400">
                 {formatCurrency(summary?.currentBalance || user?.openingBalance)}

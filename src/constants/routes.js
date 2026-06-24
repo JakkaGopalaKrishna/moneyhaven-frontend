@@ -9,6 +9,8 @@ export const ROUTES = {
   GOALS: '/goals',
   ANALYTICS: '/analytics',
   REPORTS: '/reports',
+  NOTIFICATIONS: '/notifications',
+  NOTIFICATION_SETTINGS: '/notifications/settings',
   PROFILE: '/profile',
   NOT_FOUND: '*',
 };
