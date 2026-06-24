@@ -249,14 +249,19 @@ const Dashboard = () => {
           <Card title={LABELS.HEALTH_SCORE} className="shadow-sm text-center">
             <Progress 
               type="dashboard" 
-              percent={summary?.budgetSummary?.budgetHealthScore || summary?.healthScore || 0} 
+              percent={summary?.healthScore || 0} 
               format={(percent) => `${percent}/100`}
               strokeColor={{
                 '0%': '#ff4d4f',
                 '100%': '#52c41a',
               }}
             />
-            <p className="mt-4 text-gray-500 dark:text-gray-400">Your financial health is looking great!</p>
+            <p className="mt-4 text-gray-500 dark:text-gray-400">
+              {summary?.healthScore >= 80 ? 'Your financial health is excellent!' : 
+               summary?.healthScore >= 60 ? 'Your financial health is looking good!' : 
+               summary?.healthScore >= 40 ? 'Your financial health is fair.' : 
+               'Your financial health needs attention.'}
+            </p>
             <Button type="link" onClick={() => navigate('/analytics')} className="mt-2">
               View Full Analysis
             </Button>
