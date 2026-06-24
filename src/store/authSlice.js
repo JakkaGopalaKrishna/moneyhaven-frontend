@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../services/authService';
+import { updateProfileUser, uploadAvatarUser, deleteAvatarUser } from './profileSlice';
 
 const initialState = {
   user: null,
@@ -192,6 +193,22 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
+      })
+      // Profile Updates Sync
+      .addCase(updateProfileUser.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user = { ...state.user, ...action.payload.user };
+        }
+      })
+      .addCase(uploadAvatarUser.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user = { ...state.user, ...action.payload.user };
+        }
+      })
+      .addCase(deleteAvatarUser.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user = { ...state.user, ...action.payload.user };
+        }
       });
   },
 });
