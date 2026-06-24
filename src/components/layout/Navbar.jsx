@@ -19,7 +19,7 @@ const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isDarkMode, toggleTheme } = useTheme();
-  
+
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { summary } = useSelector((state) => state.dashboard);
   const { notifications, unreadCount } = useSelector((state) => state.notifications);
@@ -75,7 +75,7 @@ const Navbar = ({ onMenuClick }) => {
   return (
     <header className="h-16 bg-white dark:bg-[#1f1f1f] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sticky top-0 z-10 transition-colors duration-200">
       <div className="flex items-center gap-4">
-        <button 
+        <button
           className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
           onClick={onMenuClick}
         >
@@ -87,13 +87,13 @@ const Navbar = ({ onMenuClick }) => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button 
-          type="text" 
-          icon={isDarkMode ? <SunOutlined className="text-yellow-500" /> : <MoonOutlined />} 
+        <Button
+          type="text"
+          icon={isDarkMode ? <SunOutlined className="text-yellow-500" /> : <MoonOutlined />}
           onClick={toggleTheme}
           className="dark:text-white"
         />
-        
+
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
             <Dropdown
@@ -151,9 +151,6 @@ const Navbar = ({ onMenuClick }) => {
                 <Avatar src={user?.avatar || undefined} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
                 <span className="hidden sm:flex items-center text-sm font-medium text-gray-700 dark:text-gray-200">
                   {user?.firstName} {user?.lastName}
-                  {user?.isVerified && (
-                    <span className="ml-1 text-green-500 text-xs" title="Verified Email">✅</span>
-                  )}
                 </span>
               </div>
             </Dropdown>
