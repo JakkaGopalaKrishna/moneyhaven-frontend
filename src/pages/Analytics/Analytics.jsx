@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Row, Col, Typography, Card, Statistic, Spin, Alert, Tag, Empty, Progress } from 'antd';
+import { Row, Col, Typography, Statistic, Tag, Empty, Progress } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleOutlined, WarningOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllAnalytics } from '../../store/analyticsSlice';
@@ -8,6 +8,10 @@ import {
   LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer 
 } from 'recharts';
+import PageHeader from '../../components/common/PageHeader';
+import SectionCard from '../../components/common/SectionCard';
+import SkeletonLoader from '../../components/common/SkeletonLoader';
+import EmptyState from '../../components/common/EmptyState';
 
 const { Title, Text } = Typography;
 
@@ -25,18 +29,12 @@ const Analytics = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
-        <Title level={2}>Analytics & Insights</Title>
-        <Row gutter={[16, 16]}>
-          {[1, 2, 3, 4].map(i => (
-            <Col xs={12} sm={6} key={i}>
-              <Card loading className="h-32" />
-            </Col>
-          ))}
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} md={16}><Card loading className="h-80" /></Col>
-          <Col xs={24} md={8}><Card loading className="h-80" /></Col>
+      <div className="space-y-6 animate-fade-in">
+        <PageHeader title="Analytics & Insights" subtitle="Discover trends and actionable advice for your finances." />
+        <SkeletonLoader type="stat" count={4} />
+        <Row gutter={[24, 24]}>
+          <Col xs={24} md={16}><SkeletonLoader type="chart" /></Col>
+          <Col xs={24} md={8}><SkeletonLoader type="list" /></Col>
         </Row>
       </div>
     );
@@ -44,8 +42,11 @@ const Analytics = () => {
 
   if (!overview) {
     return (
-      <div className="max-w-7xl mx-auto py-12 px-4 flex justify-center items-center h-full">
-        <Empty description="No data available. Add transactions to unlock insights!" />
+      <div className="space-y-6 animate-fade-in">
+        <PageHeader title="Analytics & Insights" subtitle="Discover trends and actionable advice for your finances." />
+        <div className="flex justify-center py-12">
+          <EmptyState title="No Data Available" description="Add transactions to unlock insights!" />
+        </div>
       </div>
     );
   }
@@ -96,83 +97,82 @@ const Analytics = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 space-y-6 px-4">
-      {/* Header */}
-      <div>
-        <Title level={2} className="!mb-1 dark:text-white">Analytics & Insights</Title>
-        <Text className="text-gray-500 dark:text-gray-400">Discover trends and actionable advice for your finances.</Text>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader 
+        title="Analytics & Insights" 
+        subtitle="Discover trends and actionable advice for your finances." 
+      />
 
       {/* Comparison Widgets */}
-      <Row gutter={[16, 16]}>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+      <Row gutter={[24, 24]}>
+        <Col xs={12} lg={6}>
+          <SectionCard>
             <Statistic title="This Month's Income" value={overview.thisMonthIncome} prefix="₹" />
             <div className="mt-2 text-xs">
-              <span className={overview.incomeChangePercentage >= 0 ? "text-green-500" : "text-red-500"}>
+              <span className={overview.incomeChangePercentage >= 0 ? "text-fintech-success" : "text-fintech-danger"}>
                 {overview.incomeChangePercentage >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
                 {Math.abs(overview.incomeChangePercentage)}%
               </span>
-              <span className="text-gray-400 ml-1">vs last month</span>
+              <span className="text-fintech-textMuted ml-1">vs last month</span>
             </div>
-          </Card>
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+        <Col xs={12} lg={6}>
+          <SectionCard>
             <Statistic title="This Month's Expenses" value={overview.thisMonthExpenses} prefix="₹" />
             <div className="mt-2 text-xs">
-              <span className={overview.expenseChangePercentage <= 0 ? "text-green-500" : "text-red-500"}>
+              <span className={overview.expenseChangePercentage <= 0 ? "text-fintech-success" : "text-fintech-danger"}>
                 {overview.expenseChangePercentage >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
                 {Math.abs(overview.expenseChangePercentage)}%
               </span>
-              <span className="text-gray-400 ml-1">vs last month</span>
+              <span className="text-fintech-textMuted ml-1">vs last month</span>
             </div>
-          </Card>
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic title="Savings Rate" value={overview.savingsRate} suffix="%" valueStyle={{ color: overview.savingsRate >= 20 ? '#52c41a' : '#faad14' }} />
-          </Card>
+        <Col xs={12} lg={6}>
+          <SectionCard>
+            <Statistic title="Savings Rate" value={overview.savingsRate} suffix="%" valueStyle={{ color: overview.savingsRate >= 20 ? '#22c55e' : '#f59e0b' }} />
+          </SectionCard>
         </Col>
-        <Col xs={12} sm={6}>
-          <Card bordered={false} className="shadow-sm">
+        <Col xs={12} lg={6}>
+          <SectionCard>
             <Statistic title="Goal Achievement Rate" value={goals?.achievementRate || 0} suffix="%" />
-          </Card>
+          </SectionCard>
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row gutter={[24, 24]}>
         {/* Charts Panel */}
-        <Col xs={24} md={16} className="space-y-6">
-          <Card title="Income vs Expense Trend" bordered={false} className="shadow-sm">
-            <div className="h-64">
+        <Col xs={24} lg={16} className="space-y-6">
+          <SectionCard title="Income vs Expense Trend">
+            <div className="h-[250px] md:h-[300px] lg:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyTrendData}>
                   <defs>
                     <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#52c41a" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#52c41a" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f5222d" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#f5222d" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <RechartsTooltip formatter={(val) => `₹${val}`} />
+                  <XAxis dataKey="name" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
                   <Legend />
-                  <Area type="monotone" dataKey="Income" stroke="#52c41a" fillOpacity={1} fill="url(#colorIncome)" />
-                  <Area type="monotone" dataKey="Expense" stroke="#f5222d" fillOpacity={1} fill="url(#colorExpense)" />
+                  <Area type="monotone" dataKey="Income" stroke="#22c55e" fillOpacity={1} fill="url(#colorIncome)" />
+                  <Area type="monotone" dataKey="Expense" stroke="#ef4444" fillOpacity={1} fill="url(#colorExpense)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </Card>
+          </SectionCard>
 
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12}>
-              <Card title="Expense Breakdown" bordered={false} className="shadow-sm">
-                <div className="h-64">
+          <Row gutter={[24, 24]}>
+            <Col xs={24} md={12}>
+              <SectionCard title="Expense Breakdown">
+                <div className="h-[250px] md:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -188,97 +188,96 @@ const Analytics = () => {
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <RechartsTooltip formatter={(val) => `₹${val}`} />
+                      <RechartsTooltip formatter={(val) => `₹${val}`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-              </Card>
+              </SectionCard>
             </Col>
-            <Col xs={24} sm={12}>
-              <Card title="Budget Utilization" bordered={false} className="shadow-sm">
-                <div className="h-64">
+            <Col xs={24} md={12}>
+              <SectionCard title="Budget Utilization">
+                <div className="h-[250px] md:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={budgets?.budgetUtilization || []} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                       <XAxis type="number" hide />
-                      <YAxis dataKey="category" type="category" width={80} />
-                      <RechartsTooltip formatter={(val) => `${val}%`} />
-                      <Bar dataKey="utilizationPercentage" fill="#1677ff" radius={[0, 4, 4, 0]}>
+                      <YAxis dataKey="category" type="category" width={80} stroke="#9ca3af" />
+                      <RechartsTooltip formatter={(val) => `${val}%`} contentStyle={{ backgroundColor: '#111827', borderColor: '#1f2937', color: '#f9fafb' }} />
+                      <Bar dataKey="utilizationPercentage" fill="#3b82f6" radius={[0, 4, 4, 0]}>
                         {(budgets?.budgetUtilization || []).map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.utilizationPercentage > 100 ? '#f5222d' : '#1677ff'} />
+                          <Cell key={`cell-${index}`} fill={entry.utilizationPercentage > 100 ? '#ef4444' : '#3b82f6'} />
                         ))}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </Card>
+              </SectionCard>
             </Col>
           </Row>
         </Col>
 
         {/* Health & Insights Panel */}
-        <Col xs={24} md={8} className="space-y-6">
-          <Card title="Financial Health Score" bordered={false} className="shadow-sm text-center">
+        <Col xs={24} lg={8} className="space-y-6">
+          <SectionCard title="Financial Health Score" className="text-center">
             <Progress 
               type="dashboard" 
               percent={health?.score || 0} 
               strokeColor={{
-                '0%': '#f5222d',
-                '50%': '#faad14',
-                '100%': '#52c41a',
+                '0%': '#ef4444',
+                '50%': '#f59e0b',
+                '100%': '#22c55e',
               }}
               format={pct => (
                 <div className="flex flex-col items-center">
-                  <span className="text-3xl font-bold">{pct}</span>
-                  <span className="text-xs text-gray-500 font-normal">
+                  <span className="text-3xl font-bold dark:text-white">{pct}</span>
+                  <span className="text-xs text-fintech-textMuted font-normal mt-1">
                     {pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Average' : 'Needs Work'}
                   </span>
                 </div>
               )}
             />
-          </Card>
+          </SectionCard>
 
-          <Card title="Insights Engine" bordered={false} className="shadow-sm">
-            <div className="space-y-3">
-              {insights?.insights?.length === 0 && <Empty description="No insights yet." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+          <SectionCard title="Insights Engine">
+            <div className="space-y-4">
+              {insights?.insights?.length === 0 && <EmptyState description="No insights yet." icon={<InfoCircleOutlined />} />}
               {insights?.insights?.map((insight, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-sm">
-                  <div className="mt-1">{getSeverityIcon(insight.severity)}</div>
-                  <span>{insight.message}</span>
+                <div key={idx} className="flex items-start gap-3 p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+                  <div className="mt-0.5">{getSeverityIcon(insight.severity)}</div>
+                  <span className="text-sm dark:text-fintech-text">{insight.message}</span>
                 </div>
               ))}
             </div>
-          </Card>
+          </SectionCard>
 
-          <Card title="Recommendations" bordered={false} className="shadow-sm bg-blue-50/50 dark:bg-blue-900/10">
-            <div className="space-y-3">
-              {insights?.recommendations?.length === 0 && <Text type="secondary">No specific recommendations.</Text>}
+          <SectionCard title="Recommendations" className="bg-blue-50/50 dark:bg-fintech-primary/10">
+            <div className="space-y-4">
+              {insights?.recommendations?.length === 0 && <Text className="text-fintech-textMuted">No specific recommendations.</Text>}
               {insights?.recommendations?.map((rec, idx) => (
-                <div key={idx} className="border-l-2 border-blue-400 pl-3">
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-sm">{rec.title}</span>
+                <div key={idx} className="border-l-2 border-fintech-primary pl-4">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-medium text-sm dark:text-white">{rec.title}</span>
                     <Tag color={getPriorityColor(rec.priority)}>{rec.priority}</Tag>
                   </div>
-                  <Text type="secondary" className="text-xs">{rec.description}</Text>
+                  <Text className="text-fintech-textMuted text-xs block">{rec.description}</Text>
                 </div>
               ))}
             </div>
-          </Card>
+          </SectionCard>
 
-          <Card title="AI Forecast" bordered={false} className="shadow-sm">
-            <div className="flex justify-between items-center text-sm">
-              <Text type="secondary">Next Month Est. Expense:</Text>
-              <Text strong>₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
+          <SectionCard title="AI Forecast">
+            <div className="flex justify-between items-center text-sm p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+              <Text className="text-fintech-textMuted">Next Month Est. Expense</Text>
+              <Text className="font-bold dark:text-white">₹{forecast?.monthlyExpenseForecast?.forecastValue}</Text>
             </div>
-            <div className="flex justify-between items-center text-sm mt-2">
-              <Text type="secondary">Confidence:</Text>
-              <Tag color="cyan">{forecast?.monthlyExpenseForecast?.confidence}%</Tag>
+            <div className="flex justify-between items-center text-sm mt-3 p-3 bg-fintech-bg/50 rounded-xl border border-fintech-border/30">
+              <Text className="text-fintech-textMuted">Confidence</Text>
+              <Tag color="cyan" className="m-0">{forecast?.monthlyExpenseForecast?.confidence}%</Tag>
             </div>
-          </Card>
+          </SectionCard>
         </Col>
       </Row>
-
     </div>
   );
 };
