@@ -285,7 +285,7 @@ const Dashboard = () => {
                 type="dashed" 
                 icon={<PlusCircleOutlined />} 
                 className="h-20 flex flex-col items-center justify-center text-green-600 hover:text-green-500 hover:border-green-500"
-                onClick={() => navigate('/income')}
+                onClick={() => navigate('/transactions', { state: { openModal: true, type: 'income' } })}
               >
                 <span className="mt-2">Add Income</span>
               </Button>
@@ -293,7 +293,7 @@ const Dashboard = () => {
                 type="dashed" 
                 icon={<MinusCircleOutlined />} 
                 className="h-20 flex flex-col items-center justify-center text-red-600 hover:text-red-500 hover:border-red-500"
-                onClick={() => navigate('/expenses')}
+                onClick={() => navigate('/transactions', { state: { openModal: true, type: 'expense' } })}
               >
                 <span className="mt-2">Add Expense</span>
               </Button>

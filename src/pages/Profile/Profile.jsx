@@ -15,7 +15,9 @@ const Profile = () => {
   const [passwordForm] = Form.useForm();
   
   const baseURL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
-  const avatarUrl = user?.avatar ? `${baseURL}${user.avatar}` : null;
+  const avatarUrl = user?.avatar 
+    ? (user.avatar.startsWith('http') ? user.avatar : `${baseURL}${user.avatar}`) 
+    : null;
 
   useEffect(() => {
     dispatch(getDashboardSummaryUser());

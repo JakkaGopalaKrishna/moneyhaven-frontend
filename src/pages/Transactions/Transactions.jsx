@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { 
   Table, Button, Input, Space, Tag, Modal, message, Select, DatePicker, Row, Col, Typography, InputNumber 
 } from 'antd';
@@ -23,6 +24,7 @@ const { Option } = Select;
 
 const Transactions = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { transactions, loading, pagination, error } = useSelector((state) => state.transactions);
   const { categories } = useSelector((state) => state.categories);
 
@@ -52,6 +54,14 @@ const Transactions = () => {
       dispatch(fetchCategories());
     }
   }, [currentPage, pageSize, filters]);
+
+  useEffect(() => {
+    if (location.state?.openModal) {
+      setIsFormVisible(true);
+      // Clean up state so refresh doesn't reopen modal
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (error) {
