@@ -280,6 +280,14 @@ const Dashboard = () => {
                 <span className="mt-2">Create Goal</span>
               </Button>
             </div>
+            <Button 
+              type="dashed" 
+              block
+              className="mt-4 h-12 text-indigo-600 border-indigo-200 hover:text-indigo-500 hover:border-indigo-500"
+              onClick={() => navigate('/reports')}
+            >
+              Export Financial Reports
+            </Button>
           </Card>
 
           <Card title="Savings Goals" className="shadow-sm" extra={<a onClick={() => navigate('/goals')}>View All</a>}>
