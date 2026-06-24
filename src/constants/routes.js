@@ -9,6 +9,7 @@ export const ROUTES = {
   GOALS: '/goals',
   ANALYTICS: '/analytics',
   REPORTS: '/reports',
+  SCHEDULES: '/schedules',
   NOTIFICATIONS: '/notifications',
   NOTIFICATION_SETTINGS: '/notifications/settings',
   PROFILE: '/profile',

@@ -14,6 +14,7 @@ import Budgets from '../pages/Budgets';
 import Goals from '../pages/Goals';
 import Analytics from '../pages/Analytics';
 import Reports from '../pages/Reports';
+import ScheduledReports from '../pages/ScheduledReports';
 import Notifications from '../pages/Notifications/Notifications';
 import NotificationSettings from '../pages/Notifications/NotificationSettings';
 import Login from '../pages/Auth/Login';
@@ -45,6 +46,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.GOALS} element={<Goals />} />
             <Route path={ROUTES.ANALYTICS} element={<Analytics />} />
             <Route path={ROUTES.REPORTS} element={<Reports />} />
+            <Route path={ROUTES.SCHEDULES} element={<ScheduledReports />} />
             <Route path={ROUTES.NOTIFICATIONS} element={<Notifications />} />
             <Route path={ROUTES.NOTIFICATION_SETTINGS} element={<NotificationSettings />} />
           </Route>
