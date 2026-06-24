@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, clearError } from '../../store/authSlice';
 import AppCard from '../../components/common/AppCard';
 import AppInput from '../../components/common/AppInput';
 import AppButton from '../../components/common/AppButton';
@@ -11,13 +13,30 @@ const Login = () => {
     password: '',
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  
+  const from = location.state?.from?.pathname || ROUTES.DASHBOARD;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+    return () => {
+      dispatch(clearError());
+    };
+  }, [isAuthenticated, navigate, dispatch, from]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
+    dispatch(loginUser(formData));
   };
 
   return (
@@ -47,8 +66,10 @@ const Login = () => {
           required
         />
         
+        {error && <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</div>}
+        
         <div className="pt-4">
-          <AppButton type="primary" htmlType="submit" className="w-full">
+          <AppButton type="primary" htmlType="submit" className="w-full" loading={loading}>
             Login
           </AppButton>
         </div>

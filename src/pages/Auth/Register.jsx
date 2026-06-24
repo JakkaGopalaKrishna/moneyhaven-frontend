@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser, clearError } from '../../store/authSlice';
 import AppCard from '../../components/common/AppCard';
 import AppInput from '../../components/common/AppInput';
 import AppButton from '../../components/common/AppButton';
@@ -15,6 +17,20 @@ const Register = () => {
     openingBalance: '',
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(ROUTES.DASHBOARD, { replace: true });
+    }
+    return () => {
+      dispatch(clearError());
+    };
+  }, [isAuthenticated, navigate, dispatch]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -29,7 +45,10 @@ const Register = () => {
       alert("Opening balance cannot be negative");
       return;
     }
-    console.log('Register attempt:', formData);
+    
+    // eslint-disable-next-line no-unused-vars
+    const { confirmPassword, ...registerData } = formData;
+    dispatch(registerUser(registerData));
   };
 
   return (
@@ -100,8 +119,10 @@ const Register = () => {
           step="0.01"
         />
         
+        {error && <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</div>}
+        
         <div className="pt-4">
-          <AppButton type="primary" htmlType="submit" className="w-full">
+          <AppButton type="primary" htmlType="submit" className="w-full" loading={loading}>
             Register
           </AppButton>
         </div>
