@@ -7,6 +7,7 @@ export const ROUTES = {
   CATEGORIES: '/categories',
   BUDGETS: '/budgets',
   GOALS: '/goals',
+  ANALYTICS: '/analytics',
   PROFILE: '/profile',
   NOT_FOUND: '*',
 };
