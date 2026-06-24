@@ -1,6 +1,10 @@
 import axios from 'axios';
-import { STORAGE_KEYS } from '../constants/storageKeys';
-import { getItem, removeItem } from '../utils/localStorage';
+
+let store;
+
+export const injectStore = (_store) => {
+  store = _store;
+};
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -14,9 +18,11 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = getItem(STORAGE_KEYS.TOKEN);
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (store) {
+      const token = store.getState().auth.token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
@@ -31,15 +37,8 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response) {
-      // Handle global errors here (e.g., 401 Unauthorized)
-      if (error.response.status === 401) {
-        removeItem(STORAGE_KEYS.TOKEN);
-        removeItem(STORAGE_KEYS.USER);
-        // Optionally dispatch a logout action or reload if appropriate
-        // window.location.href = '/login';
-      }
-    }
+    // Optionally handle global errors like 401 Unauthorized here
+    // by dispatching a logout action through the injected store
     return Promise.reject(error);
   }
 );
