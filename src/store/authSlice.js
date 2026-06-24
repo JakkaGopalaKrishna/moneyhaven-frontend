@@ -7,7 +7,42 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  otpSent: false,
+  otpVerified: false,
+  otpLoading: false,
 };
+
+// Send OTP
+export const sendOtpUser = createAsyncThunk(
+  'auth/sendOtp',
+  async (email, thunkAPI) => {
+    try {
+      return await authService.sendOtp(email);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Verify OTP
+export const verifyOtpUser = createAsyncThunk(
+  'auth/verifyOtp',
+  async (data, thunkAPI) => {
+    try {
+      return await authService.verifyOtp(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 // Register user
 export const registerUser = createAsyncThunk(
@@ -70,9 +105,41 @@ const authSlice = createSlice({
       state.error = null;
     },
     resetAuth: () => initialState,
+    resetOtpState: (state) => {
+      state.otpSent = false;
+      state.otpVerified = false;
+      state.otpLoading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      // Send OTP
+      .addCase(sendOtpUser.pending, (state) => {
+        state.otpLoading = true;
+        state.error = null;
+      })
+      .addCase(sendOtpUser.fulfilled, (state) => {
+        state.otpLoading = false;
+        state.otpSent = true;
+      })
+      .addCase(sendOtpUser.rejected, (state, action) => {
+        state.otpLoading = false;
+        state.error = action.payload;
+      })
+      // Verify OTP
+      .addCase(verifyOtpUser.pending, (state) => {
+        state.otpLoading = true;
+        state.error = null;
+      })
+      .addCase(verifyOtpUser.fulfilled, (state) => {
+        state.otpLoading = false;
+        state.otpVerified = true;
+      })
+      .addCase(verifyOtpUser.rejected, (state, action) => {
+        state.otpLoading = false;
+        state.error = action.payload;
+      })
       // Register
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -129,5 +196,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, resetAuth } = authSlice.actions;
+export const { clearError, resetAuth, resetOtpState } = authSlice.actions;
 export default authSlice.reducer;

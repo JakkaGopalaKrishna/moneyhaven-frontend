@@ -20,11 +20,23 @@ const logout = async () => {
   return response.data;
 };
 
+const sendOtp = async (email) => {
+  const response = await api.post('/auth/send-otp', { email });
+  return response.data;
+};
+
+const verifyOtp = async (data) => {
+  const response = await api.post('/auth/verify-otp', data);
+  return response.data;
+};
+
 const authService = {
   register,
   login,
   getMe,
   logout,
+  sendOtp,
+  verifyOtp,
 };
 
 export default authService;
