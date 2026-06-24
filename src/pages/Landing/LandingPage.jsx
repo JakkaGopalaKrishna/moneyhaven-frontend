@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import CountUp from 'react-countup';
+import CountUpModule from 'react-countup';
+const CountUp = CountUpModule.default || CountUpModule;
 import { Button } from 'antd';
 import { 
   SunOutlined, MoonOutlined, SwapOutlined, WalletOutlined, FlagOutlined, 
