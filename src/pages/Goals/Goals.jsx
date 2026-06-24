@@ -4,7 +4,7 @@ import {
   Dropdown, Menu, Empty, Select, Alert, Spin, message, Modal 
 } from 'antd';
 import { 
-  PlusOutlined, TrophyOutlined, TargetOutlined, DollarOutlined, 
+  PlusOutlined, TrophyOutlined, AimOutlined, DollarOutlined, 
   EllipsisOutlined, EditOutlined, DeleteOutlined, EyeOutlined,
   CalendarOutlined, RiseOutlined, FireOutlined, WarningOutlined
 } from '@ant-design/icons';
@@ -158,7 +158,7 @@ const Goals = () => {
       <Row gutter={[16, 16]}>
         <Col xs={12} sm={6}>
           <Card bordered={false} className="shadow-sm">
-            <Statistic title="Total Active Goals" value={stats?.activeGoals || 0} prefix={<TargetOutlined />} />
+            <Statistic title="Total Active Goals" value={stats?.activeGoals || 0} prefix={<AimOutlined />} />
           </Card>
         </Col>
         <Col xs={12} sm={6}>
