@@ -9,6 +9,7 @@ import PublicRoute from './PublicRoute';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Transactions from '../pages/Transactions';
+import Categories from '../pages/Categories';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import NotFound from '../pages/NotFound/NotFound';
@@ -33,6 +34,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
             <Route path={ROUTES.PROFILE} element={<Profile />} />
             <Route path={ROUTES.TRANSACTIONS} element={<Transactions />} />
+            <Route path={ROUTES.CATEGORIES} element={<Categories />} />
           </Route>
         </Route>
 
