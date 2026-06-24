@@ -56,11 +56,6 @@ const Navbar = ({ onMenuClick }) => {
       onClick: () => navigate(ROUTES.PROFILE),
     },
     {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: 'Settings',
-    },
-    {
       type: 'divider',
     },
     {
