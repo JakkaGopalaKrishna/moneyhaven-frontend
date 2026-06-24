@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Tabs, Form, Input, Button, Upload, Progress, Statistic, Row, Col, message, Popconfirm, Avatar, Badge } from 'antd';
-import { UserOutlined, UploadOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { UserOutlined, UploadOutlined, DeleteOutlined, CheckCircleOutlined, SafetyCertificateFilled } from '@ant-design/icons';
 import { updateProfileUser, uploadAvatarUser, deleteAvatarUser, changePasswordUser } from '../../store/profileSlice';
 import { getDashboardSummaryUser } from '../../store/dashboardSlice';
 
@@ -131,7 +131,7 @@ const Profile = () => {
           <div>
             <p className="text-gray-500 dark:text-gray-400">Email Status</p>
             {user?.isVerified ? (
-              <Badge status="success" text="Verified Email ✅" className="dark:text-white" />
+              <Badge status="success" text={<span>Verified Email <SafetyCertificateFilled className="text-green-500 ml-1" /></span>} className="dark:text-white" />
             ) : (
               <Badge status="warning" text="Unverified" className="dark:text-white" />
             )}
