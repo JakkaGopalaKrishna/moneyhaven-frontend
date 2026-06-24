@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Footer from '../components/layout/Footer';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
 import MobileDrawer from '../components/layout/MobileDrawer';
+import PageTransition from '../components/common/PageTransition';
 
 const MainLayout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#141414] transition-colors duration-200">
@@ -17,7 +20,11 @@ const MainLayout = () => {
         <Navbar onMenuClick={() => setDrawerOpen(true)} />
         
         <main className="flex-grow p-4 md:p-6 lg:p-8">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </AnimatePresence>
         </main>
         
         <Footer />
