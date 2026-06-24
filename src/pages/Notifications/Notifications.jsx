@@ -64,12 +64,12 @@ const Notifications = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-6 px-4 space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <Title level={2} className="!mb-1 dark:text-white">Notification Center</Title>
           <Text className="text-gray-500 dark:text-gray-400">Stay up to date with your financial activity.</Text>
         </div>
-        <Space>
+        <Space className="w-full sm:w-auto">
           <Button 
             icon={<CheckOutlined />} 
             onClick={() => dispatch(markAllAsRead())}
