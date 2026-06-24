@@ -76,7 +76,7 @@ const Navbar = ({ onMenuClick }) => {
             </div>
             <Dropdown menu={{ items: userMenu }} placement="bottomRight" trigger={['click']}>
               <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
-                <Avatar src={user?.avatar} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
+                <Avatar src={user?.avatar || undefined} icon={!user?.avatar && <UserOutlined />} className="bg-blue-500" />
                 <span className="hidden sm:flex items-center text-sm font-medium text-gray-700 dark:text-gray-200">
                   {user?.firstName} {user?.lastName}
                   {user?.isVerified && (

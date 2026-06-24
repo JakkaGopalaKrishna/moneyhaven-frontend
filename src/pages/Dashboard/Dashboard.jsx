@@ -21,6 +21,21 @@ import { formatCurrency } from '../../utils/currencyFormatter';
 
 const { TITLES, LABELS, EMPTY_STATES } = DASHBOARD_CONSTANTS;
 
+const AnimatedValue = ({ value, isCurrency = true }) => {
+  const CountUpComponent = CountUp.default || CountUp;
+  if (!isCurrency) return <CountUpComponent end={value || 0} duration={2} separator="," />;
+  
+  return (
+    <CountUpComponent 
+      end={value || 0} 
+      duration={2} 
+      separator="," 
+      decimals={2} 
+      prefix="₹" 
+    />
+  );
+};
+
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,20 +55,6 @@ const Dashboard = () => {
 
   const handleRefresh = () => {
     dispatch(getDashboardSummaryUser());
-  };
-
-  const AnimatedValue = ({ value, isCurrency = true }) => {
-    if (!isCurrency) return <CountUp end={value || 0} duration={2} separator="," />;
-    
-    return (
-      <CountUp 
-        end={value || 0} 
-        duration={2} 
-        separator="," 
-        decimals={2} 
-        prefix="₹" 
-      />
-    );
   };
 
   // Skeleton placeholders
@@ -98,61 +99,67 @@ const Dashboard = () => {
           <Card title={TITLES.SUMMARY} className="shadow-sm">
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-blue-50 dark:bg-blue-900/20">
+                <Card variant="borderless" className="bg-blue-50 dark:bg-blue-900/20">
                   <Statistic 
                     title={LABELS.CURRENT_BALANCE}
-                    valueRender={() => <AnimatedValue value={summary?.currentBalance} />}
+                    formatter={(val) => <AnimatedValue value={val} />}
+                    value={summary?.currentBalance || 0}
                     prefix={<WalletOutlined className="text-blue-500 mr-2" />}
-                    valueStyle={{ color: '#1677ff', fontWeight: 'bold' }}
+                    styles={{ content: { color: '#1677ff', fontWeight: 'bold' } }}
                   />
                 </Card>
               </Col>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-green-50 dark:bg-green-900/20">
+                <Card variant="borderless" className="bg-green-50 dark:bg-green-900/20">
                   <Statistic 
                     title={LABELS.TOTAL_INCOME}
-                    valueRender={() => <AnimatedValue value={summary?.totalIncome} />}
+                    formatter={(val) => <AnimatedValue value={val} />}
+                    value={summary?.totalIncome || 0}
                     prefix={<ArrowUpOutlined className="text-green-500 mr-2" />}
-                    valueStyle={{ color: '#3f8600' }}
+                    styles={{ content: { color: '#3f8600' } }}
                   />
                 </Card>
               </Col>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-red-50 dark:bg-red-900/20">
+                <Card variant="borderless" className="bg-red-50 dark:bg-red-900/20">
                   <Statistic 
                     title={LABELS.TOTAL_EXPENSES}
-                    valueRender={() => <AnimatedValue value={summary?.totalExpenses} />}
+                    formatter={(val) => <AnimatedValue value={val} />}
+                    value={summary?.totalExpenses || 0}
                     prefix={<ArrowDownOutlined className="text-red-500 mr-2" />}
-                    valueStyle={{ color: '#cf1322' }}
+                    styles={{ content: { color: '#cf1322' } }}
                   />
                 </Card>
               </Col>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-purple-50 dark:bg-purple-900/20">
+                <Card variant="borderless" className="bg-purple-50 dark:bg-purple-900/20">
                   <Statistic 
                     title={LABELS.SAVINGS}
-                    valueRender={() => <AnimatedValue value={summary?.savings} />}
+                    formatter={(val) => <AnimatedValue value={val} />}
+                    value={summary?.savings || 0}
                     prefix={<BankOutlined className="text-purple-500 mr-2" />}
-                    valueStyle={{ color: '#722ed1' }}
+                    styles={{ content: { color: '#722ed1' } }}
                   />
                 </Card>
               </Col>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-gray-50 dark:bg-gray-800">
+                <Card variant="borderless" className="bg-gray-50 dark:bg-gray-800">
                   <Statistic 
                     title={LABELS.OPENING_BALANCE}
-                    valueRender={() => <AnimatedValue value={summary?.openingBalance} />}
-                    valueStyle={{ color: '#8c8c8c' }}
+                    formatter={(val) => <AnimatedValue value={val} />}
+                    value={summary?.openingBalance || 0}
+                    styles={{ content: { color: '#8c8c8c' } }}
                   />
                 </Card>
               </Col>
               <Col xs={24} sm={12} lg={8}>
-                <Card bordered={false} className="bg-gray-50 dark:bg-gray-800">
+                <Card variant="borderless" className="bg-gray-50 dark:bg-gray-800">
                   <Statistic 
                     title={LABELS.TOTAL_TRANSACTIONS}
-                    valueRender={() => <AnimatedValue value={summary?.totalTransactions} isCurrency={false} />}
+                    formatter={(val) => <AnimatedValue value={val} isCurrency={false} />}
+                    value={summary?.totalTransactions || 0}
                     prefix={<TransactionOutlined className="text-gray-500 mr-2" />}
-                    valueStyle={{ color: '#8c8c8c' }}
+                    styles={{ content: { color: '#8c8c8c' } }}
                   />
                 </Card>
               </Col>
