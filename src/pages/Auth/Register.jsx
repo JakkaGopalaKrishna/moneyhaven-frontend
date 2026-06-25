@@ -65,15 +65,11 @@ const Register = () => {
       return;
     }
 
-    // BYPASS OTP FOR NOW
-    handleRegister();
-    /*
     dispatch(sendOtpUser({ email: formData.email })).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
         setTimeLeft(300); // 5 minutes
       }
     });
-    */
   };
 
   const handleVerifyOtp = () => {
