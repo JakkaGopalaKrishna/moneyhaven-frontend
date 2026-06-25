@@ -1,58 +1,45 @@
-# MoneyHaven Frontend
+# MoneyHaven - Frontend
 
-This is the React frontend for MoneyHaven.
+MoneyHaven is a modern, premium personal finance operating system that allows you to take control of your financial journey through intelligent budgeting, goal tracking, and AI-driven insights.
 
-## Project Architecture
-- **React 19**
-- **Vite**
-- **Redux Toolkit** (with `redux-persist`)
-- **React Router DOM**
-- **Ant Design** & **Tailwind CSS**
+## 🚀 Tech Stack
+- **Framework:** React 18 with Vite
+- **Styling:** Tailwind CSS & Ant Design
+- **State Management:** Redux Toolkit
+- **Routing:** React Router v6
+- **Animations:** Framer Motion
 
-## Folder Structure
-```text
-src/
-├── app/          # Redux store and persistor initialization
-├── components/   # Reusable UI components
-├── constants/    # Route names and storage keys
-├── hooks/        # Custom React hooks (e.g., useAuth, useTheme)
-├── layouts/      # Application layouts (AuthLayout, MainLayout)
-├── pages/        # Page components (Dashboard, Login, Register)
-├── routes/       # React Router setup and Protected/Public routes
-├── services/     # Axios API configurations and service files
-├── store/        # Redux slices (authSlice, themeSlice)
-└── utils/        # Helper functions (e.g., localStorage)
-```
+## ✨ Features
+- **Modern Dashboard:** Track your overall wealth and monthly cash flows instantly.
+- **Split-Screen Authentication:** A beautiful, responsive split-screen login and registration flow with OTP verification.
+- **Smart Transactions & Budgets:** Categorize income and expenses effortlessly.
+- **Goal Tracking:** Visualize your path to savings targets.
+- **Rich Notification Center:** Real-time updates and alerts regarding your financial health.
+- **Dark Mode Support:** First-class dark mode implementation across the entire application using dynamic semantic tokens.
 
-## Authentication & Registration Flow
-- **Registration with OTP:**
-  1. User enters personal details.
-  2. Frontend requests `/api/auth/send-otp`.
-  3. Displays Ant Design `Input.OTP` with a 5-minute countdown timer.
-  4. User verifies OTP. Frontend unlocks the "Create Account" button.
-  5. Submits full form to `/api/auth/register` to auto-login.
-- **Profile Management:** Users can update `firstName`, `lastName`, and `openingBalance`. Avatars are uploaded via Ant Design `Upload` directly to the backend. Passwords can be changed with strict security requirements.
-- **Financial Dashboard:** A dynamic dashboard displaying aggregated statistics, animated balances (`react-countup`), a Health Score, Quick Actions, and beautiful Skeleton loaders. The Navbar automatically tracks real-time balance updates.
-- **JWT Based:** Tokens are saved in `Redux` and persisted to `localStorage` using `redux-persist`.
-- **Interceptors:** Axios interceptors attach the token automatically to outgoing requests.
-- **Protected Routes:** Unauthorized users are redirected to the Login page.
-- **Redux State Management:**
-  - `sendOtpUser`
-  - `verifyOtpUser`
-  - `registerUser`
-  - `loginUser`
-  - `getCurrentUser`
-  - `logoutUser`
-- **Dynamic Loading:** The `App.jsx` handles fetching the user object on mount using the persisted token.
+## 🛠️ Getting Started
 
-## Environment Variables
-Create a `.env` file from `.env.example`:
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
 
-## Setup Instructions
-```bash
-npm install
-npm run dev
-```
+### Installation
+1. Clone the repository and navigate to the frontend directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root and add your backend API URL:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 🎨 Design Philosophy
+Built with a focus on premium aesthetics and user trust. MoneyHaven utilizes semantic colors (`fintech-surface`, `fintech-primary`, `fintech-bg`) to maintain a clean, distraction-free environment for financial management.
+
+---
+*Built with 💙 for personal finance.*
