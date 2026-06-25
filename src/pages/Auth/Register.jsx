@@ -96,17 +96,20 @@ const Register = () => {
   };
 
   return (
-    <AppCard className="w-full max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-[#1677ff] dark:text-blue-400 mb-2">MoneyHaven</h1>
-        <p className="text-gray-500 dark:text-gray-400">
-          {!otpSent ? 'Create a new account to get started.' : 'Verify your email address.'}
+    <div className="w-full">
+      <div className="text-center mb-10">
+        <div className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg mb-6">
+          M
+        </div>
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3">Create an account</h1>
+        <p className="text-gray-500 dark:text-fintech-textMuted text-base">
+          {!otpSent ? 'Join MoneyHaven to take control of your finances.' : 'Check your email for the verification code.'}
         </p>
       </div>
 
       {!otpSent ? (
         // STEP 1: Details
-        <form className="space-y-4" onSubmit={handleSendOtp}>
+        <form className="space-y-5" onSubmit={handleSendOtp}>
           <div className="flex gap-4">
             <AppInput
               label="First Name"
@@ -128,7 +131,7 @@ const Register = () => {
             />
           </div>
           <AppInput
-            label="Email"
+            label="Email address"
             type="email"
             name="email"
             placeholder="Enter your email"
@@ -157,7 +160,7 @@ const Register = () => {
             required
           />
           <AppInput
-            label="Opening Balance"
+            label="Opening Balance (Optional)"
             type="number"
             name="openingBalance"
             placeholder="0.00"
@@ -167,67 +170,68 @@ const Register = () => {
             step="0.01"
           />
 
-          {error && <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</div>}
+          {error && <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 p-3 rounded-lg">{error}</div>}
 
-          <div className="pt-4">
-            <AppButton type="primary" htmlType="submit" className="w-full" loading={otpLoading}>
-              Send OTP
+          <div className="pt-2">
+            <AppButton type="primary" htmlType="submit" className="w-full h-12 rounded-xl text-base font-medium shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all" loading={otpLoading}>
+              Create account
             </AppButton>
           </div>
         </form>
       ) : (
         // STEP 2 & 3: OTP Verification and Create Account
-        <div className="space-y-6 text-center">
-          <Text className="text-gray-600 dark:text-gray-300">
+        <div className="space-y-8 text-center">
+          <p className="text-gray-600 dark:text-gray-300 text-base">
             We've sent a 6-digit verification code to <br />
-            <strong className="text-gray-800 dark:text-gray-100">{formData.email}</strong>
-          </Text>
+            <strong className="text-gray-900 dark:text-white mt-1 block">{formData.email}</strong>
+          </p>
 
           {!otpVerified ? (
-            <div className="flex flex-col items-center gap-4">
-              <Input.OTP length={6} value={otp} onChange={setOtp} disabled={otpLoading} />
+            <div className="flex flex-col items-center gap-6">
+              <Input.OTP length={6} value={otp} onChange={setOtp} disabled={otpLoading} size="large" />
 
               {timeLeft > 0 ? (
-                <Text type="secondary" className="font-mono text-lg">
-                  Time remaining: {formatTime(timeLeft)}
-                </Text>
+                <div className="text-sm font-medium text-gray-500 dark:text-fintech-textMuted">
+                  Code expires in <span className="text-blue-600 dark:text-blue-400 font-mono">{formatTime(timeLeft)}</span>
+                </div>
               ) : (
-                <Text type="danger">OTP Expired</Text>
+                <div className="text-sm font-medium text-red-500">OTP Expired</div>
               )}
 
-              {error && <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-2 rounded w-full">{error}</div>}
+              {error && <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 p-3 rounded-lg w-full">{error}</div>}
 
-              <div className="flex gap-4 w-full">
+              <div className="flex flex-col sm:flex-row gap-4 w-full pt-2">
                 <AppButton
                   onClick={handleResendOtp}
                   disabled={timeLeft > 0 || otpLoading}
-                  className="flex-1"
+                  className="flex-1 h-12 rounded-xl font-medium"
                 >
-                  Resend OTP
+                  Resend Code
                 </AppButton>
                 <AppButton
                   type="primary"
                   onClick={handleVerifyOtp}
                   loading={otpLoading}
                   disabled={otp.length !== 6 || timeLeft === 0}
-                  className="flex-1"
+                  className="flex-1 h-12 rounded-xl font-medium shadow-md shadow-blue-500/20"
                 >
-                  Verify OTP
+                  Verify Email
                 </AppButton>
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div className="text-green-500 font-medium text-lg bg-green-50 dark:bg-green-900/20 p-3 rounded">
-                <SafetyCertificateFilled className="text-green-500 mr-2" />OTP Verified Successfully
+            <div className="space-y-6">
+              <div className="text-green-600 font-medium text-base bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/30 p-4 rounded-xl flex items-center justify-center gap-2">
+                <SafetyCertificateFilled className="text-green-500 text-xl" />
+                Email Verified Successfully
               </div>
               <AppButton
                 type="primary"
                 onClick={handleRegister}
                 loading={loading}
-                className="w-full"
+                className="w-full h-12 rounded-xl text-base font-medium shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all"
               >
-                Create Account
+                Complete Registration
               </AppButton>
             </div>
           )}
@@ -235,14 +239,14 @@ const Register = () => {
       )}
 
       {!otpSent && (
-        <div className="mt-6 text-center text-gray-500 dark:text-gray-400">
+        <div className="mt-8 text-center text-sm text-gray-500 dark:text-fintech-textMuted">
           Already have an account?{' '}
-          <Link to={ROUTES.LOGIN} className="text-[#1677ff] hover:underline">
-            Login here
+          <Link to={ROUTES.LOGIN} className="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+            Sign in instead
           </Link>
         </div>
       )}
-    </AppCard>
+    </div>
   );
 };
 
