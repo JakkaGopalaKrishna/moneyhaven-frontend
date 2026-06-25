@@ -119,7 +119,7 @@ const Notifications = () => {
               ].filter(Boolean)}
             >
               <List.Item.Meta
-                avatar={<div className="mt-1 md:mt-2 text-lg md:text-xl">{getIcon(item.severity)}</div>}
+                avatar={<div className="mt-1 md:mt-2 text-lg md:text-xl pl-2 md:pl-3">{getIcon(item.severity)}</div>}
                 title={
                   <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full gap-1 md:gap-0">
                     <span className={`font-semibold text-sm md:text-base pr-2 ${!item.isRead ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>

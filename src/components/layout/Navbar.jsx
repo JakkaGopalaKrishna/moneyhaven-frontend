@@ -97,39 +97,41 @@ const Navbar = ({ onMenuClick }) => {
             <Dropdown
               trigger={['click']}
               dropdownRender={() => (
-                <div className="bg-white dark:bg-[#1f1f1f] rounded-lg shadow-lg w-80 border border-gray-200 dark:border-gray-800">
-                  <div className="flex justify-between items-center p-3 border-b border-gray-100 dark:border-gray-800">
-                    <span className="font-semibold dark:text-white">Notifications</span>
-                    <Button type="link" size="small" onClick={() => navigate(ROUTES.NOTIFICATIONS)}>View All</Button>
+                <div className="bg-white dark:bg-fintech-surface rounded-xl shadow-2xl w-80 sm:w-96 border border-gray-100 dark:border-fintech-border overflow-hidden">
+                  <div className="flex justify-between items-center px-5 py-4 border-b border-gray-100 dark:border-fintech-border bg-gray-50/50 dark:bg-fintech-bg/50">
+                    <span className="font-semibold text-gray-900 dark:text-white text-base">Notifications</span>
+                    <Button type="link" size="small" className="text-blue-600 hover:text-blue-700 font-medium p-0" onClick={() => navigate(ROUTES.NOTIFICATIONS)}>View All</Button>
                   </div>
                   <List
                     itemLayout="horizontal"
                     dataSource={notifications.slice(0, 5)}
-                    className="max-h-80 overflow-y-auto"
-                    locale={{ emptyText: <div className="p-4 text-center text-gray-500">No new notifications</div> }}
+                    className="max-h-[350px] px-2 pb-2 overflow-y-auto custom-scrollbar"
+                    locale={{ emptyText: <div className="p-8 text-center text-gray-500 dark:text-fintech-textMuted">No new notifications</div> }}
                     renderItem={(item) => (
                       <List.Item
-                        className={`px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 border-b border-gray-50 dark:border-gray-800 ${!item.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
+                        className={`px-5 py-4 mt-2 rounded-lg cursor-pointer transition-colors border-b border-gray-100 dark:border-fintech-border last:border-0 hover:bg-gray-50 dark:hover:bg-white/5 ${!item.isRead ? 'bg-blue-50/40 dark:bg-fintech-primary/10' : ''}`}
                         onClick={() => handleNotificationClick(item)}
                       >
                         <List.Item.Meta
                           title={
-                            <div className="flex justify-between items-center w-full gap-2">
-                              <div className="flex items-center gap-2">
-                                {item.severity === 'critical' && <ExclamationCircleOutlined className="text-fintech-danger" />}
-                                {item.severity === 'warning' && <WarningOutlined className="text-fintech-warning" />}
-                                {item.severity === 'success' && <CheckCircleOutlined className="text-fintech-success" />}
-                                {(!item.severity || item.severity === 'info') && <InfoCircleOutlined className="text-fintech-primary" />}
-                                <span className={`text-sm ${!item.isRead ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>
+                            <div className="flex justify-between items-start w-full mb-1">
+                              <div className="flex items-start gap-3">
+                                <div className="mt-0.5 shrink-0">
+                                  {item.severity === 'critical' && <ExclamationCircleOutlined className="text-red-500 text-base" />}
+                                  {item.severity === 'warning' && <WarningOutlined className="text-amber-500 text-base" />}
+                                  {item.severity === 'success' && <CheckCircleOutlined className="text-green-500 text-base" />}
+                                  {(!item.severity || item.severity === 'info') && <InfoCircleOutlined className="text-blue-500 text-base" />}
+                                </div>
+                                <span className={`text-sm ${!item.isRead ? 'font-bold text-gray-900 dark:text-white' : 'font-medium text-gray-700 dark:text-gray-300'}`}>
                                   {item.title}
                                 </span>
                               </div>
                             </div>
                           }
                           description={
-                            <div className="flex flex-col mt-1">
-                              <Text className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{item.message}</Text>
-                              <Text className="text-[10px] text-gray-400 mt-1">{dayjs(item.createdAt).fromNow()}</Text>
+                            <div className="flex flex-col pl-7">
+                              <Text className="text-xs text-gray-500 dark:text-fintech-textMuted line-clamp-2 leading-relaxed">{item.message}</Text>
+                              <Text className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5 font-medium">{dayjs(item.createdAt).fromNow()}</Text>
                             </div>
                           }
                         />
