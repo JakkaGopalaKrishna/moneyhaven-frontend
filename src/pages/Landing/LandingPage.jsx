@@ -6,8 +6,8 @@ import { Helmet } from 'react-helmet-async';
 import CountUpModule from 'react-countup';
 const CountUp = CountUpModule.default || CountUpModule;
 import { Button } from 'antd';
-import { 
-  SunOutlined, MoonOutlined, SwapOutlined, WalletOutlined, FlagOutlined, 
+import {
+  SunOutlined, MoonOutlined, SwapOutlined, WalletOutlined, FlagOutlined,
   LineChartOutlined, FileTextOutlined, BellOutlined, CheckCircleOutlined,
   SafetyCertificateOutlined, SyncOutlined, GlobalOutlined, MenuOutlined, CloseOutlined,
   DashboardOutlined
@@ -16,7 +16,7 @@ import useTheme from '../../hooks/useTheme';
 import { ROUTES } from '../../constants/routes';
 
 const FeatureCard = ({ icon, title, description, delay }) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
@@ -32,7 +32,7 @@ const FeatureCard = ({ icon, title, description, delay }) => (
 );
 
 const StepCard = ({ number, title, description, delay }) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, x: -30 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true, margin: "-50px" }}
@@ -139,7 +139,7 @@ const LandingPage = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -179,7 +179,7 @@ const LandingPage = () => {
               The Ultimate Finance OS
             </span>
           </motion.div>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8 leading-tight"
           >
@@ -188,13 +188,13 @@ const LandingPage = () => {
               Financial Future
             </span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-500 dark:text-fintech-textMuted mb-10"
           >
             Track every penny, set smart budgets, achieve savings goals, and get AI-powered insights to grow your wealth seamlessly.
           </motion.p>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row justify-center items-center gap-4"
           >
@@ -209,48 +209,6 @@ const LandingPage = () => {
               </Button>
             </Link>
           </motion.div>
-        </motion.div>
-
-        {/* Browser Mockup */}
-        <motion.div 
-          initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 md:mt-24 max-w-5xl mx-auto relative z-10 perspective-1000"
-        >
-          <div className="rounded-xl shadow-2xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-200/50 dark:border-fintech-border/50 bg-white dark:bg-fintech-surface overflow-hidden transform rotate-x-12 scale-95 md:scale-100 hover:rotate-x-0 transition-transform duration-700">
-            {/* Browser Header */}
-            <div className="bg-gray-100 dark:bg-[#1f1f1f] border-b border-gray-200 dark:border-fintech-border px-4 py-3 flex items-center gap-2">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
-              </div>
-              <div className="mx-auto bg-white dark:bg-fintech-bg border border-gray-200 dark:border-fintech-border rounded-md px-3 py-1 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2 max-w-[200px] w-full justify-center">
-                <SafetyCertificateOutlined /> moneyhaven.com
-              </div>
-            </div>
-            {/* Fake Dashboard Content */}
-            <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 dark:bg-fintech-bg min-h-[300px]">
-               {/* Sidebar Mock */}
-               <div className="hidden md:block col-span-1 space-y-4 border-r border-gray-200 dark:border-fintech-border pr-6">
-                 <div className="h-8 w-3/4 bg-gray-200 dark:bg-fintech-surface rounded-lg mb-8 animate-pulse"></div>
-                 {[1,2,3,4,5].map(i => <div key={i} className="h-6 w-full bg-gray-200 dark:bg-fintech-surface rounded-md animate-pulse" style={{ opacity: 1 - i * 0.1 }}></div>)}
-               </div>
-               {/* Main Content Mock */}
-               <div className="col-span-1 md:col-span-2 space-y-6">
-                 <div className="flex justify-between items-end">
-                   <div className="space-y-2">
-                     <div className="h-6 w-48 bg-gray-200 dark:bg-fintech-surface rounded-md animate-pulse"></div>
-                     <div className="h-4 w-32 bg-gray-200 dark:bg-fintech-surface rounded-md animate-pulse opacity-50"></div>
-                   </div>
-                   <div className="h-10 w-32 bg-blue-100 dark:bg-fintech-primary/20 rounded-lg animate-pulse"></div>
-                 </div>
-                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                   {[1,2,3,4].map(i => <div key={i} className="h-24 bg-white dark:bg-fintech-surface rounded-xl border border-gray-100 dark:border-fintech-border shadow-sm animate-pulse"></div>)}
-                 </div>
-                 <div className="h-64 bg-white dark:bg-fintech-surface rounded-xl border border-gray-100 dark:border-fintech-border shadow-sm animate-pulse"></div>
-               </div>
-            </div>
-          </div>
         </motion.div>
       </section>
 
@@ -288,29 +246,29 @@ const LandingPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <FeatureCard 
-            delay={0.1} icon={<SwapOutlined />} title="Smart Transactions" 
-            description="Log your income and expenses instantly. Categorize everything effortlessly to see exactly where your money goes." 
+          <FeatureCard
+            delay={0.1} icon={<SwapOutlined />} title="Smart Transactions"
+            description="Log your income and expenses instantly. Categorize everything effortlessly to see exactly where your money goes."
           />
-          <FeatureCard 
-            delay={0.2} icon={<WalletOutlined />} title="Intelligent Budgets" 
-            description="Set spending limits for categories. We'll track your progress and alert you before you overspend." 
+          <FeatureCard
+            delay={0.2} icon={<WalletOutlined />} title="Intelligent Budgets"
+            description="Set spending limits for categories. We'll track your progress and alert you before you overspend."
           />
-          <FeatureCard 
-            delay={0.3} icon={<FlagOutlined />} title="Goal Tracking" 
-            description="Saving for a vacation or a house? Set visual milestones and watch your savings grow over time." 
+          <FeatureCard
+            delay={0.3} icon={<FlagOutlined />} title="Goal Tracking"
+            description="Saving for a vacation or a house? Set visual milestones and watch your savings grow over time."
           />
-          <FeatureCard 
-            delay={0.4} icon={<LineChartOutlined />} title="AI Analytics" 
-            description="Get personalized, AI-driven insights on your spending habits and forecast your future expenses." 
+          <FeatureCard
+            delay={0.4} icon={<LineChartOutlined />} title="AI Analytics"
+            description="Get personalized, AI-driven insights on your spending habits and forecast your future expenses."
           />
-          <FeatureCard 
-            delay={0.5} icon={<FileTextOutlined />} title="Rich Reports" 
-            description="Export your financial data cleanly as PDF or Excel. Perfect for tax season or personal reviews." 
+          <FeatureCard
+            delay={0.5} icon={<FileTextOutlined />} title="Rich Reports"
+            description="Export your financial data cleanly as PDF or Excel. Perfect for tax season or personal reviews."
           />
-          <FeatureCard 
-            delay={0.6} icon={<BellOutlined />} title="Real-time Alerts" 
-            description="Stay on top of your finances with smart notifications for budget limits and goal achievements." 
+          <FeatureCard
+            delay={0.6} icon={<BellOutlined />} title="Real-time Alerts"
+            description="Stay on top of your finances with smart notifications for budget limits and goal achievements."
           />
         </div>
       </section>
@@ -326,7 +284,7 @@ const LandingPage = () => {
           <div className="max-w-4xl mx-auto relative">
             {/* Connecting Line */}
             <div className="hidden md:block absolute left-8 top-8 bottom-8 w-0.5 bg-blue-100 dark:bg-fintech-primary/20 z-0"></div>
-            
+
             <div className="space-y-12">
               <StepCard number="1" delay={0.1} title="Create Your Account" description="Sign up in seconds. Your data is secure and encrypted." />
               <StepCard number="2" delay={0.2} title="Track Transactions" description="Start logging your daily expenses and income. Assign them to categories." />
@@ -341,19 +299,40 @@ const LandingPage = () => {
       <section id="testimonials" className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Loved by Users</h2>
         <p className="text-lg text-gray-500 dark:text-fintech-textMuted mb-12">Join thousands of others taking control of their finances.</p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[1,2,3].map((i) => (
-            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-gray-50 dark:bg-fintech-surface/50 border border-gray-100 dark:border-fintech-border p-8 rounded-2xl">
-              <div className="text-yellow-400 text-xl mb-4">★★★★★</div>
-              <p className="text-gray-700 dark:text-gray-300 italic mb-6">"MoneyHaven completely changed how I look at my expenses. The AI insights are incredible!"</p>
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-fintech-primary/20 flex items-center justify-center font-bold text-blue-600 dark:text-blue-400">
-                  U{i}
+          {[
+            {
+              name: "Sarah Jenkins",
+              role: "Freelance Designer",
+              initials: "SJ",
+              quote: "MoneyHaven completely changed how I look at my expenses. The AI insights helped me cut down my subscription bloat by 30% in just one month!"
+            },
+            {
+              name: "David Chen",
+              role: "Software Engineer",
+              initials: "DC",
+              quote: "Finally, a finance dashboard that doesn't feel like a spreadsheet. Tracking my custom budgets and savings goals has never been this intuitive."
+            },
+            {
+              name: "Emily Rodriguez",
+              role: "Small Business Owner",
+              initials: "ER",
+              quote: "The automated reports save me hours during tax season. I can see exactly where every penny goes with crystal clear categorization."
+            }
+          ].map((testimonial, i) => (
+            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: (i+1) * 0.1 }} className="bg-gray-50 dark:bg-fintech-surface/50 border border-gray-100 dark:border-fintech-border p-8 rounded-2xl flex flex-col justify-between">
+              <div>
+                <div className="text-yellow-400 text-xl mb-4">★★★★★</div>
+                <p className="text-gray-700 dark:text-gray-300 italic mb-6">"{testimonial.quote}"</p>
+              </div>
+              <div className="flex items-center justify-center gap-3 mt-auto">
+                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-fintech-primary/20 flex items-center justify-center font-bold text-blue-600 dark:text-blue-400 shrink-0">
+                  {testimonial.initials}
                 </div>
                 <div className="text-left">
-                  <div className="font-bold text-gray-900 dark:text-white text-sm">Happy User {i}</div>
-                  <div className="text-xs text-gray-500 dark:text-fintech-textMuted">Early Adopter</div>
+                  <div className="font-bold text-gray-900 dark:text-white text-sm">{testimonial.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-fintech-textMuted">{testimonial.role}</div>
                 </div>
               </div>
             </motion.div>
@@ -365,7 +344,7 @@ const LandingPage = () => {
       <section className="py-20 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-blue-600 dark:bg-fintech-surface"></div>
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        
+
         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Ready to take control of your finances?</h2>
           <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
