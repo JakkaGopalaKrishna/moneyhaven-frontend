@@ -26,7 +26,7 @@ const deleteGoal = async (id) => {
 };
 
 const addSavings = async (id, savingsData) => {
-  const response = await api.post(`/goals/${id}/savings`, savingsData);
+  const response = await api.post(`/goals/${id}/contributions`, savingsData);
   return response.data;
 };
 
