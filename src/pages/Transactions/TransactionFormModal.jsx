@@ -53,8 +53,7 @@ const TransactionFormModal = ({ visible, transaction, onClose, onSuccess }) => {
         form.resetFields();
         form.setFieldsValue({
           type: TRANSACTION_TYPES.EXPENSE,
-          transactionDate: dayjs(),
-          paymentMethod: 'Cash'
+          transactionDate: dayjs()
         });
       }
     }
