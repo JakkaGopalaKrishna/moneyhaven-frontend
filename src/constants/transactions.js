@@ -24,12 +24,7 @@ export const CATEGORIES = {
 };
 
 export const PAYMENT_METHODS = [
-  'Cash',
-  'Bank',
   'UPI',
-  'Credit Card',
-  'Debit Card',
-  'Other',
 ];
 
 export const CATEGORY_COLORS = {
